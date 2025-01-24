@@ -1,0 +1,439 @@
+@model GidIndustrial.Gideon.WebApi.Models.Quote
+
+<style type="text/css">
+    h1{
+        color:red;
+    }
+    h2.page-title{
+        margin:3px 0;
+        font-size:25px;
+        font-weight:normal;
+    }
+    *{
+        font-family: Arial, Helvetica, sans-serif;
+        box-sizing:border-box;
+        font-size:18px;
+    }
+    .purchase-order-outline{
+        border: 2px solid gray;
+    }
+    .purchase-order-number-header{
+        font-size:25px;
+        text-align: center;
+        margin:15px 0;
+    }
+    .contact-info-container{
+        display:inline-block;
+        width:100%;
+    }
+    .column{
+        width:49%;
+        display:block;
+        float:left;
+    }
+    .column.right{
+        margin-left:2%;
+    }
+    .column div{
+        width:100%;
+    }
+    .contact-info-container label{
+        width:144px;
+        display:inline-block;
+    } 
+    .contact-info-container span{
+        display:inline-block;
+    }
+    .billing-address-container,.shipping-address-container{
+        width:49%;
+        float: left;
+        display:inline-block;
+    }
+    .shipping-address-container{
+        margin-left:2%;
+    }
+    .billing-address-container h2, .shipping-address-container h2{
+        background: whitesmoke;
+        border-radius: 3px;
+        padding:10px;
+        text-align: center;
+    }
+    .disclaimers{
+        padding-top:30px;
+    }
+    .disclaimers p{
+        font-size:13px;
+        font-style: italic;
+    }
+    .header-container{
+        margin:0; padding:0;
+        display: -webkit-box;
+        -webkit-box-pack: justify;
+        -webkit-box-align: center;
+    }
+    .purchase-order-title{
+        font-size:35px;
+    }
+    .img-address-container{
+
+    }
+    .info-boxes-container{
+        display:inline-block;
+        width:100%;
+    }
+    .info-box{
+        width:32%;
+        margin:1%;
+        background-color: #f1f1f1;
+        padding:5px;
+        display:block;
+        float:left;
+    }
+    .info-box.banking-info{
+        width:40%;
+    }
+    .info-box.banking-info .info-box-body div {
+        padding:0;
+    }
+    .info-box.vat-info{
+        width:24%;
+    }
+    .info-box.vat-info .info-box-body div {
+        padding:0;
+    }
+    .info-box.first{
+        margin-left:0;
+    }
+    .info-box.last{
+        margin-right:0;
+    }
+    .info-box-title, .line-items-header-container{
+        background-color: #dfdfdf;
+        padding:1px 5px;
+    }
+    .line-items-header-text, .info-box-title-text{
+        font-size:26px;
+    }
+    .info-box-body, .line-items-table-container{
+        padding:8px;
+    }
+    .info-box-body div{
+        padding:0px 0;
+    }
+    .info-box.address-box .info-box-body div{
+        padding: 0px 0;
+    }
+    .gid-address-container div{
+        font-size:16px;
+        line-height:1.1;
+    }
+    *{
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+    .page-title-container{
+        display: -webkit-box;
+        -webkit-box-pack: center;
+        padding: 3px 0 7px;
+    }
+</style>
+<div>
+    <div>
+        <div class="header-container">
+            <img style="width:131px; height:80px;" src="@ViewData["LogoUrl"]" />
+            <div class="gid-address-container">
+                <div>@Model.GidLocationOption.MainAddress.Name</div>
+                <div>@Model.GidLocationOption.MainAddress.Address1</div>
+                @if(Model.GidLocationOption.MainAddress.Address2 != null){<div>@Model.GidLocationOption.MainAddress.Address2</div>}
+                <div>@Model.GidLocationOption.MainAddress.City, @Model.GidLocationOption.MainAddress.State @Model.GidLocationOption.MainAddress.ZipPostalCode</div>
+            </div>
+        </div>
+        <div class="page-title-container">
+            <h2 class="page-title">Quote #@Model.Id</h2>
+        </div>
+        <div>
+        </div>
+        <div>
+            <div class="info-boxes-container">
+                <div class="info-box first">
+                    <div class="info-box-title">
+                        <span class="info-box-title-text">Information</span>
+                    </div>
+                    <div class="info-box-body">
+                        <div>Quote #@Model.Id</div>
+                        <div>Created: @Model.CreatedAt.Value.ToString("d")</div>
+                        <div>Expires: @Convert.ToDateTime(Model.Expiration).ToString("d")</div>
+                        @if(Model.ShippingMethod != null){<div>Shipping Method: @Model.ShippingMethod.Value</div>}
+                        @if(Model.PaymentTerm != null){<div>Payment Terms: @Model.PaymentTerm.Name</div>}
+                    </div>
+                </div>
+                <div class="info-box">
+                    <div class="info-box-title">
+                        <span class="info-box-title-text">Prepared For</span>
+                    </div>
+                    <div class="info-box-body">
+                        @if(Model.Company != null && Model.Company.Name != null && Model.Company.Name != ""){<div> @Model.Company.Name </div>}
+                        <div>@Model.Contact.FirstName @Model.Contact.LastName</div>
+                        <div>@Model.Email</div>
+                        <div>@Model.Phone</div>
+                    </div>
+                </div>
+                <div class="info-box last">
+                    <div class="info-box-title">
+                        <span class="info-box-title-text">Prepared By</span>
+                    </div>
+                    <div class="info-box-body">
+                        <div>@Model.SalesPerson.FirstName @Model.SalesPerson.LastName</div>
+                        <div>@Model.SalesPerson.Email</div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="info-boxes-container">
+                @if(Model.BillingAddress != null && Model.BillingAddress.Address1 != null){
+                <div class="info-box first address-box">
+                    <div class="info-box-title">
+                        <span class="info-box-title-text">Billing Address</span>
+                    </div>
+                    <div class="info-box-body">
+                        @if(!String.IsNullOrWhiteSpace(Model.BillingAddress.Name)){<div>@Model.BillingAddress.Name</div>}
+                        @if(!String.IsNullOrWhiteSpace(Model.BillingAddress.Address1)){<div>@Model.BillingAddress.Address1</div>}
+                        @if(!String.IsNullOrWhiteSpace(Model.BillingAddress.Address2)){<div>@Model.BillingAddress.Address2</div>}
+                        @if(!String.IsNullOrWhiteSpace(Model.BillingAddress.Address3)){<div>@Model.BillingAddress.Address3</div>}
+                        <div>@Model.BillingAddress.City, @Model.BillingAddress.State @Model.BillingAddress.ZipPostalCode</div>
+                    </div>
+                </div>
+                }
+                @if(Model.ShippingAddress != null && Model.ShippingAddress.Address1 != null){
+                <div class="info-box address-box">
+                    <div class="info-box-title">
+                        <span class="info-box-title-text">Shipping Address</span>
+                    </div>
+                    <div class="info-box-body">
+                        @if(!String.IsNullOrWhiteSpace(Model.ShippingAddress.Name)){<div>@Model.ShippingAddress.Name</div>}
+                        @if(!String.IsNullOrWhiteSpace(Model.ShippingAddress.Address1)){<div>@Model.ShippingAddress.Address1</div>}
+                        @if(!String.IsNullOrWhiteSpace(Model.ShippingAddress.Address2)){<div>@Model.ShippingAddress.Address2</div>}
+                        @if(!String.IsNullOrWhiteSpace(Model.ShippingAddress.Address3)){<div>@Model.ShippingAddress.Address3</div>}
+                        <div>@Model.ShippingAddress.City, @Model.ShippingAddress.State @Model.ShippingAddress.ZipPostalCode</div>
+                    </div>
+                </div>
+                }
+            </div>
+            <style type="text/css">
+            .line-items-table-spacer{
+                width:100%;
+                height:30px;
+            }
+            .line-items-table{
+                width:100%;
+                margin-top:5px;
+            }
+            .product-header{
+                /*width:70%;*/
+            }
+            .grand-total-text, .additional-charge-value{
+                display:inline-block;
+            }
+            .total-column, .grand-total-text, .additional-charge-value{
+                width:100px;
+                text-align: left;
+            }
+            th, td{
+                text-align: left;
+            }
+            .total-container{
+                text-align: right;
+                margin-top:20px;
+            }
+            .grand-total-title-text{
+                font-weight:bold;
+            }
+            .line-items-table thead th{
+                background:whitesmoke;
+                border-bottom:1px solid gray;
+                padding:3px;
+            }
+            .line-items-table tr td{
+                padding:3px;
+                border-bottom:1px solid gray;
+            }
+            .page2{
+                page-break-before: always;
+            }
+            .line-items-table-container{
+                background-color: #f1f1f1;
+            }
+            th{
+                white-space:nowrap !important;
+                padding-right:10px;
+            }
+            </style>
+            <div class="line-items-table-spacer"></div>
+            <div class="line-items-table-container">
+                <div class="line-items-header-container">
+                    <span class="line-items-header-text">Line Items</span>
+                </div>
+                <table class="line-items-table">
+                    <thead>
+                        <tr>
+                            <th class="product-header">Product</th>
+                            <th>Description</th>
+                            <th>Condition</th>
+                            <th>Lead Time</th>
+                            <th>Warranty</th>
+                            <th>Unit Price</th>
+                            <th>Qty</th>
+                            <th class="total-column">Total</th>
+                        </tr>
+                    </thead>
+                    
+                        @{
+                            double grandTotalPrice = 0;
+                            double subTotal = 0;
+                        }
+                        @foreach(var lineItem in @Model.LineItems)
+                        {
+                            var productName = lineItem.Product != null ? lineItem.Product.PartNumber : lineItem.ProductName;
+                            if (lineItem.DisplayPartNumber != null && lineItem.DisplayPartNumber != "")
+                            {
+                                productName = lineItem.DisplayPartNumber;
+                            }
+                            var price = lineItem.Price == null ? 0 : lineItem.Price;
+                            var priceAfterDiscount = (double)price;
+                            if(lineItem.DiscountPercent != null && lineItem.DiscountPercent > 0){
+                                priceAfterDiscount = ((double)price)*(100 - (double)lineItem.DiscountPercent)*.01;
+                            }
+                            double itemTotalPrice;
+                            if(lineItem.Quantity > 0){
+                                itemTotalPrice = priceAfterDiscount*(double)lineItem.Quantity;
+                            }else{
+                                itemTotalPrice = priceAfterDiscount;
+                            }
+                            subTotal += itemTotalPrice;
+                            var description = lineItem.Description ?? "";
+                            if(description == "" && lineItem.Product != null && lineItem.Product.Description != null)
+                            {
+                                description = lineItem.Product.Description;
+                            }
+                        <tr>
+                            <td>@productName</td>
+                            <td>@(description)</td>
+                            <td>@(lineItem.Condition != null ? lineItem.Condition.Value : "")</td>
+                            <td>@(lineItem.LeadTime != null ? lineItem.LeadTime.Value : "")</td>
+                            <td>@(lineItem.Warranty != null ? lineItem.Warranty.Value : "")</td>
+                            <td>@Model.CurrencyOption.Symbol@priceAfterDiscount.ToString("N2")</td>
+                            <td>@lineItem.Quantity</td>
+                            <td>@Model.CurrencyOption.Symbol@itemTotalPrice.ToString("N2")</td>
+                        </tr>
+                        @*if(@lineItem.Description != null && @lineItem.Description != ""){
+                            <tr >
+                                <td colspan="100">
+                                    @lineItem.Description
+                                </td>
+                            </tr>
+                        }*@
+                        }
+                        @{
+                            grandTotalPrice = subTotal;
+                            if(Model.SalesTax > 0){
+                                grandTotalPrice += (double)Model.SalesTax;
+                            }else{
+                                Model.SalesTax = 0;
+                            }
+                            if(Model.WireTransferFee > 0){
+                                grandTotalPrice += (double)Model.WireTransferFee;
+                            }else{
+                                Model.WireTransferFee = 0;
+                            }
+                            if(Model.CreditCardFee > 0)
+                            {
+                                grandTotalPrice += (double)Model.CreditCardFee;
+                            }
+                            else
+                            {
+                                Model.CreditCardFee = 0;
+                            }
+                            if(Model.ShippingAndHandlingFee > 0){
+                                grandTotalPrice += (double)Model.ShippingAndHandlingFee;
+                            }else{
+                                Model.ShippingAndHandlingFee = 0;
+                            }
+                            if(Model.ExpediteFee > 0){
+                                grandTotalPrice += (double)Model.ExpediteFee;
+                            }else{
+                                Model.ExpediteFee = 0;
+                            }
+                        }
+                    
+                </table>
+                <div class="total-container">
+                    <div class="additional-charge">
+                        <span class="additional-charge-title">Subtotal:</span>
+                        <span class="additional-charge-value">@Model.CurrencyOption.Symbol@subTotal.ToString("N2")</span>
+                    </div>
+                    <div class="additional-charge">
+                        <span class="additional-charge-title">Sales Tax:</span>
+                        <span class="additional-charge-value">@Model.CurrencyOption.Symbol@Model.SalesTax.Value.ToString("N2")</span>
+                    </div>
+                    <div class="additional-charge">
+                        <span class="additional-charge-title">Wire Transfer Fee:</span>
+                        <span class="additional-charge-value">@Model.CurrencyOption.Symbol@Model.WireTransferFee.Value.ToString("N2")</span>
+                    </div>
+                    <div class="additional-charge">
+                        <span class="additional-charge-title">Credit Card Fee:</span>
+                        <span class="additional-charge-value">@Model.CurrencyOption.Symbol@Model.CreditCardFee.Value.ToString("N2")</span>
+                    </div>
+                    <div class="additional-charge">
+                        <span class="additional-charge-title">Shipping &amp; Handling:</span>
+                        <span class="additional-charge-value">@Model.ShippingAndHandlingDisplay</span>
+                    </div>
+                    <div class="additional-charge">
+                        <span class="additional-charge-title">Expedite Fee:</span>
+                        <span class="additional-charge-value">@Model.CurrencyOption.Symbol@Model.ExpediteFee.Value.ToString("N2")</span>
+                    </div>
+                    <span class="grand-total-title-text">Grand Total: </span>
+                    <span class="grand-total-text">@Model.CurrencyOption.Symbol@grandTotalPrice.ToString("N2")</span>
+                </div>
+            </div>
+            <br>
+            <div class="info-boxes-container">
+                <div class="info-box first banking-info">
+                    <div class="info-box-title">
+                        <span class="info-box-title-text">Banking Info</span>
+                    </div>
+                    <div class="info-box-body">
+                        @foreach(var line in Model.GidLocationOption.BankingInfo.Split("\n")){
+                            <div>@line</div>
+                        }
+                    </div>
+                </div>
+                @if(Convert.ToBoolean(ViewData["IsGidEurope"])){
+                <div class="info-box first vat-info">
+                    <div class="info-box-title">
+                        <span class="info-box-title-text">VAT #</span>
+                    </div>
+                    <div class="info-box-body">
+                        <div>IE3541034PH</div>
+                    </div>
+                </div>
+                }
+            </div>
+            
+            <div class="disclaimers">
+                <p>Due to the nature of our industry, availability and price are subject to change until purchase order and payment are
+                confirmed by GID Industrial (the Company). Products that are scarce may quickly change and quoted price is not a
+                guarantee. Credit cards are acceptable for US customers, wire transfer for International customers.</p>
+                <p>GID Industrial is not responsible for international shipping costs or customs fees. All international orders will be
+                declared at sold value.</p>
+                <p>GID Industrial does not accept returns unless an RMA is issued. NCNR items are non-negotiable. Purchase of new,
+                refurbished, and used items are final. Customer may specify new, refurbished, or used requirements. Warranties
+                may be available (based on product source), and GID warranties SBCs. Proof of warranty is required for any return.</p>
+                <p>Due to the fragility of the items which the company repairs, the company holds no liability for damage caused while
+                client’s items are in GID’s care, including, but not limited to: refurbishment, repair, rework, testing, cleaning, or
+                baking.
+                </p>
+                <p>Freight cost will be calculated and invoiced at the time of shipment (unless if freight is explicitly quoted or if
+                customer freight account is used).</p>
+            </div>
+        </div>
+    </div>
+</div>

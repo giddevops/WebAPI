@@ -1,0 +1,227 @@
+{
+    "Invoice": {
+        "Deposit": 0,
+        "AllowIPNPayment": false,
+        "AllowOnlinePayment": false,
+        "AllowOnlineCreditCardPayment": false,
+        "AllowOnlineACHPayment": false,
+        "domain": "QBO",
+        "sparse": false,
+        "Id": "366",
+        "SyncToken": "0",
+        "MetaData": {
+            "CreateTime": "2018-12-06T07:11:50-08:00",
+            "LastUpdatedTime": "2018-12-06T07:11:50-08:00"
+        },
+        "CustomField": [
+            {
+                "DefinitionId": "1",
+                "Name": "Sales Person",
+                "Type": "StringType",
+                "StringValue": "Dane Truelson"
+            },
+            {
+                "DefinitionId": "2",
+                "Name": "Purchase Order",
+                "Type": "StringType",
+                "StringValue": "PO#456"
+            },
+            {
+                "DefinitionId": "3",
+                "Name": "Sales Order",
+                "Type": "StringType",
+                "StringValue": "1"
+            }
+        ],
+        "DocNumber": "3013",
+        "TxnDate": "2018-12-06",
+        "CurrencyRef": {
+            "value": "USD",
+            "name": "United States Dollar"
+        },
+        "LinkedTxn": [],
+        "Line": [
+            {
+                "Id": "1",
+                "LineNum": 1,
+                "Amount": 500.00,
+                "DetailType": "SalesItemLineDetail",
+                "SalesItemLineDetail": {
+                    "ItemRef": {
+                        "value": "87",
+                        "name": "test"
+                    },
+                    "UnitPrice": 100,
+                    "Qty": 5,
+                    "ItemAccountRef": {
+                        "value": "191",
+                        "name": "Sales of Product Income"
+                    },
+                    "TaxCodeRef": {
+                        "value": "TAX"
+                    },
+                    "TaxClassificationRef": {
+                        "value": "EUC-09020802-V1-00120000"
+                    }
+                }
+            },
+            {
+                "Id": "2",
+                "LineNum": 2,
+                "Amount": 250.00,
+                "DetailType": "SalesItemLineDetail",
+                "SalesItemLineDetail": {
+                    "ItemRef": {
+                        "value": "88",
+                        "name": "bob"
+                    },
+                    "UnitPrice": 50,
+                    "Qty": 5,
+                    "ItemAccountRef": {
+                        "value": "191",
+                        "name": "Sales of Product Income"
+                    },
+                    "TaxCodeRef": {
+                        "value": "TAX"
+                    },
+                    "TaxClassificationRef": {
+                        "value": "EUC-09020802-V1-00120000"
+                    }
+                }
+            },
+            {
+                "Id": "3",
+                "LineNum": 3,
+                "Amount": 1.00,
+                "DetailType": "SalesItemLineDetail",
+                "SalesItemLineDetail": {
+                    "ItemRef": {
+                        "value": "84",
+                        "name": "Wire Transfer Fee"
+                    },
+                    "UnitPrice": 1,
+                    "Qty": 1,
+                    "ItemAccountRef": {
+                        "value": "189",
+                        "name": "Billable Expense Income"
+                    },
+                    "TaxCodeRef": {
+                        "value": "NON"
+                    }
+                }
+            },
+            {
+                "Id": "4",
+                "LineNum": 4,
+                "Amount": 3.00,
+                "DetailType": "SalesItemLineDetail",
+                "SalesItemLineDetail": {
+                    "ItemRef": {
+                        "value": "85",
+                        "name": "Expedite Fee"
+                    },
+                    "UnitPrice": 3,
+                    "Qty": 1,
+                    "ItemAccountRef": {
+                        "value": "184",
+                        "name": "Services"
+                    },
+                    "TaxCodeRef": {
+                        "value": "TAX"
+                    },
+                    "TaxClassificationRef": {
+                        "value": "EUC-09020802-V1-00120000"
+                    }
+                }
+            },
+            {
+                "Amount": 754.00,
+                "DetailType": "SubTotalLineDetail",
+                "SubTotalLineDetail": {}
+            },
+            {
+                "Amount": 2.00,
+                "DetailType": "SalesItemLineDetail",
+                "SalesItemLineDetail": {
+                    "ItemRef": {
+                        "value": "SHIPPING_ITEM_ID"
+                    }
+                }
+            }
+        ],
+        "TxnTaxDetail": {
+            "TxnTaxCodeRef": {
+                "value": "7"
+            },
+            "TotalTax": 100.00,
+            "TaxLine": [
+                {
+                    "Amount": 75.76,
+                    "DetailType": "TaxLineDetail",
+                    "TaxLineDetail": {
+                        "TaxRateRef": {
+                            "value": "11"
+                        },
+                        "PercentBased": true,
+                        "TaxPercent": 6.25,
+                        "NetAmountTaxable": 753.00
+                    }
+                },
+                {
+                    "Amount": 12.12,
+                    "DetailType": "TaxLineDetail",
+                    "TaxLineDetail": {
+                        "TaxRateRef": {
+                            "value": "12"
+                        },
+                        "PercentBased": true,
+                        "TaxPercent": 1,
+                        "NetAmountTaxable": 753.00
+                    }
+                },
+                {
+                    "Amount": 12.12,
+                    "DetailType": "TaxLineDetail",
+                    "TaxLineDetail": {
+                        "TaxRateRef": {
+                            "value": "13"
+                        },
+                        "PercentBased": true,
+                        "TaxPercent": 1,
+                        "NetAmountTaxable": 753.00
+                    }
+                }
+            ]
+        },
+        "CustomerRef": {
+            "value": "137",
+            "name": "test"
+        },
+        "BillAddr": {
+            "Id": "135",
+            "Line1": "dwayne street",
+            "City": "dallas",
+            "CountrySubDivisionCode": "tx",
+            "PostalCode": "75313"
+        },
+        "ShipAddr": {
+            "Id": "136",
+            "Line1": "stayne street"
+        },
+        "FreeFormAddress": true,
+        "DueDate": "2018-12-06",
+        "ShipMethodRef": {
+            "value": "FedEx International First",
+            "name": "FedEx International First"
+        },
+        "ShipDate": "2018-12-05",
+        "TrackingNum": "12435",
+        "TotalAmt": 856.00,
+        "ApplyTaxAfterDiscount": false,
+        "PrintStatus": "NeedToPrint",
+        "EmailStatus": "NotSet",
+        "Balance": 856.00,
+        "TaxExemptionRef": {}
+    },
+    "time": "2018-12-06T07:11:49.966-08:00"
+}

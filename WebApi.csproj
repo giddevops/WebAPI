@@ -1,0 +1,156 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>aspnet-WebApi-0e538d2a-130b-40c2-948b-ae62b54f2da4</UserSecretsId>
+    <WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
+    <AssemblyName>GidIndustrial.Gideon.WebApi</AssemblyName>
+    <RootNamespace>GidIndustrial.Gideon.WebApi</RootNamespace>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <Authors>GID Industrial</Authors>
+    <Company>GID Industrial</Company>
+    <Product>Gideon.WebApi</Product>
+    <Copyright>Copyright © 2017 GID Industrial</Copyright>
+    <ApplicationInsightsResourceId>/subscriptions/546c4276-b7ac-40c7-97ff-7c51a05b7506/resourcegroups/Gideon/providers/microsoft.insights/components/GIDGideonWebApi</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/546c4276-b7ac-40c7-97ff-7c51a05b7506/resourcegroups/Gideon/providers/microsoft.insights/components/GIDGideonWebApi</ApplicationInsightsAnnotationResourceId>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <Compile Remove="Features\History\**" />
+    <Compile Remove="Features\IncomingShipment\Views\**" />
+    <Compile Remove="Features\Shipment\Views\**" />
+    <Content Remove="Features\History\**" />
+    <Content Remove="Features\IncomingShipment\Views\**" />
+    <Content Remove="Features\Shipment\Views\**" />
+    <EmbeddedResource Remove="Features\History\**" />
+    <EmbeddedResource Remove="Features\IncomingShipment\Views\**" />
+    <EmbeddedResource Remove="Features\Shipment\Views\**" />
+    <None Remove="Features\History\**" />
+    <None Remove="Features\IncomingShipment\Views\**" />
+    <None Remove="Features\Shipment\Views\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Features\Common\Views\Montserrat-Bold.ttf" />
+    <None Remove="Features\Common\Views\Montserrat-Medium.ttf" />
+    <None Remove="Features\Common\Views\Montserrat-Regular.ttf" />
+    <None Remove="Features\Common\Views\Montserrat-SemiBold.ttf" />
+    <None Remove="Properties\PublishProfiles\Azure.pubxml" />
+    <None Remove="WebApi.csproj.vspscc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Features\Common\Views\Montserrat-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\Common\Views\Montserrat-Medium.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\Common\Views\Montserrat-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\Common\Views\Montserrat-SemiBold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\IncomingShipment\Models\" />
+    <Folder Include="Features\Inventory\Models\" />
+    <Folder Include="Features\ReceivingItem\Models\" />
+    <Folder Include="Features\ReceivingItem\Controllers\" />
+    <Folder Include="Features\ShippingCarrier\Models\" />
+    <Folder Include="Features\Source\Models\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Barcoder.Renderer.Image" Version="1.0.0.73" />
+    <PackageReference Include="Dapper" Version="1.50.5" />
+    <PackageReference Include="DataMatrix.net" Version="0.4.2" />
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
+    <PackageReference Include="HtmlSanitizer" Version="4.0.185" />
+    <PackageReference Include="ImageProcessor" Version="2.9.1" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.DependencyCollector" Version="2.6.4" />
+    <PackageReference Include="Microsoft.ApplicationInsights.TraceListener" Version="2.6.4" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Graph" Version="1.8.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="QRCoder" Version="1.3.9" />
+    <PackageReference Include="Select.HtmlToPdf.NetCore" Version="23.2.0" />
+    <PackageReference Include="Sendgrid" Version="9.9.0" />
+    <PackageReference Include="TimeZoneConverter" Version="2.4.2" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.2.0" />
+    <PackageReference Include="Radzen.Blazor" Version="5.7.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fr8r\Fr8r.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Features\Attachment\Views\GIDEuropeLineCard.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Features\Attachment\Views\GIDIndustrialLineCard.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Features\Common\Views\gid-industrial-logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Features\Common\Views\logo-footer.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Features\Common\Views\logo-footer2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\barcode-number-input-round-border.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\gid-industrial-logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Features\Quote\Views\gid-industrial-logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Libraries\libwkhtmltox32bit\libwkhtmltox.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Libraries\libwkhtmltox64bit\libwkhtmltox.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,465 @@
+@model GidIndustrial.Gideon.WebApi.Models.OutgoingShipment
+@using System;
+@{
+    var salesOrder = Model.SalesOrderOutgoingShipment.SalesOrder;
+    <!-- var salesOrderLineItems = Model.GetSalesOrderLineItems(); -->
+}
+
+<style type="text/css">
+    h1{
+        color:red;
+    }
+    h2.page-title{
+        margin:3px 0;
+        font-size:25px;
+        font-weight:normal;
+    }
+    *{
+        font-family: Arial, Helvetica, sans-serif;
+        box-sizing:border-box;
+        font-size:18px;
+    }
+    .purchase-order-outline{
+        border: 2px solid gray;
+    }
+    .purchase-order-number-header{
+        font-size:25px;
+        text-align: center;
+        margin:15px 0;
+    }
+    .contact-info-container{
+        display:inline-block;
+        width:100%;
+    }
+    .column{
+        width:49%;
+        display:block;
+        float:left;
+    }
+    .column.right{
+        margin-left:2%;
+    }
+    .column div{
+        width:100%;
+    }
+    .contact-info-container label{
+        width:144px;
+        display:inline-block;
+    } 
+    .contact-info-container span{
+        display:inline-block;
+    }
+    .billing-address-container,.shipping-address-container{
+        width:49%;
+        float: left;
+        display:inline-block;
+    }
+    .shipping-address-container{
+        margin-left:2%;
+    }
+    .billing-address-container h2, .shipping-address-container h2{
+        background: whitesmoke;
+        border-radius: 3px;
+        padding:10px;
+        text-align: center;
+    }
+    .disclaimers{
+        padding-top:30px;
+    }
+    .disclaimers p{
+        font-size:13px;
+        font-style: italic;
+    }
+    .header-container{
+        margin:0; padding:0;
+        display: -webkit-box;
+        -webkit-box-pack: justify;
+        -webkit-box-align: center;
+    }
+    .purchase-order-title{
+        font-size:35px;
+    }
+    .img-address-container{
+
+    }
+    .info-boxes-container{
+        display:inline-block;
+        width:100%;
+    }
+    .info-box{
+        width:32%;
+        margin:1%;
+        background-color: #f1f1f1;
+        padding:5px;
+        display:block;
+        float:left;
+    }
+    .info-box.big{
+        width:40%;
+    }
+    .info-box.small{
+        width:28%;
+    }
+    .info-box.banking-info{
+        width:40%;
+    }
+    .info-box.banking-info .info-box-body div {
+        padding:0;
+    }
+    .info-box.vat-info{
+        width:24%;
+    }
+    .info-box.vat-info .info-box-body div {
+        padding:0;
+    }
+    .info-box.first{
+        margin-left:0;
+    }
+    .info-box.last{
+        margin-right:0;
+    }
+    .info-box-title, .line-items-header-container{
+        background-color: #dfdfdf;
+        padding:1px 5px;
+    }
+    .line-items-header-text, .info-box-title-text{
+        font-size:26px;
+    }
+    .info-box-body, .line-items-table-container{
+        padding:8px;
+    }
+    .info-box-body div{
+        padding:0px 0;
+    }
+    .info-box.address-box .info-box-body div{
+        padding: 0px 0;
+    }
+    .gid-address-container div{
+        font-size:16px;
+        line-height:1.1;
+    }
+    *{
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+    .page-title-container{
+        display: -webkit-box;
+        -webkit-box-pack: center;
+        padding: 3px 0 7px;
+    }
+</style>
+<div>
+    <div>
+        <div class="header-container">
+            <img style="width:131px; height:80px;" src="@ViewData["LogoUrl"]" />
+            <div class="gid-address-container">
+                <div>@salesOrder.GidLocationOption.MainAddress.Name</div>
+                <div>@salesOrder.GidLocationOption.MainAddress.Address1</div>
+                @if(salesOrder.GidLocationOption.MainAddress.Address2 != null){<div>@salesOrder.GidLocationOption.MainAddress.Address2</div>}
+                <div>@salesOrder.GidLocationOption.MainAddress.City, @salesOrder.GidLocationOption.MainAddress.State @salesOrder.GidLocationOption.MainAddress.ZipPostalCode</div>
+            </div>
+        </div>
+        <div class="page-title-container">
+            <h2 class="page-title">Commercial Invoice #@Model.Id-@salesOrder.Id</h2>
+        </div>
+        <div>
+        </div>
+        <div>
+            <div class="info-boxes-container">
+                <div class="info-box first big">
+                    <div class="info-box-title">
+                        <span class="info-box-title-text">Information</span>
+                    </div>
+                    <div class="info-box-body">
+                        <div>Sales Order #@salesOrder.Id</div>
+                        @if (salesOrder.Company != null) { <div>Company: @salesOrder.Company.Name</div>}
+                        @if(salesOrder.CustomerPurchaseOrderNumber != null && salesOrder.CustomerPurchaseOrderNumber != ""){
+                            <div>Customer PO #@salesOrder.CustomerPurchaseOrderNumber</div>
+                        }
+                        <div>Order Date: @salesOrder.CreatedAt.Value.ToString("d")</div>
+                        <div>Packing Date: @DateTime.UtcNow.ToString("d")</div>
+                        <div>Salesperson: @salesOrder.SalesPerson.DisplayName</div>
+                        @if(salesOrder.PaymentMethod != null) { <div>Payment Method: @salesOrder.PaymentMethod.Value </div>}
+                        @if(Model.OutgoingShipmentShippingTermOption != null) { <div>Shipping Terms: @Model.OutgoingShipmentShippingTermOption.Value </div>}
+                        @if(Model.ShippingCarrier != null){
+                            <div>
+                                Shipping: @Model.ShippingCarrier.Name
+                                @if(Model.ShippingCarrierShippingMethod != null){
+                                    <span> - @Model.ShippingCarrierShippingMethod.Name</span>
+                                }
+                            </div>
+                        }
+                        @if(Model.ECCN != "" && Model.ECCN != null)
+                        {
+                            <div>ECCN: @Model.ECCN</div>
+                        }
+                        <div>License Required: @Model.LicenseRequired</div>
+                    </div>
+                </div>
+                @if(salesOrder.BillingAddress != null){
+                <div class="info-box first address-box small">
+                    <div class="info-box-title">
+                        <span class="info-box-title-text">Billing Address</span>
+                    </div>
+                    <div class="info-box-body">
+                        @if(!String.IsNullOrWhiteSpace(salesOrder.BillingAddress.Name)){<div>@salesOrder.BillingAddress.Name</div>}
+                        @if(!String.IsNullOrWhiteSpace(salesOrder.BillingAddress.Address1)){<div>@salesOrder.BillingAddress.Address1</div>}
+                        @if(!String.IsNullOrWhiteSpace(salesOrder.BillingAddress.Address2)){<div>@salesOrder.BillingAddress.Address2</div>}
+                        @if(!String.IsNullOrWhiteSpace(salesOrder.BillingAddress.Address3)){<div>@salesOrder.BillingAddress.Address3</div>}
+                        <div>@salesOrder.BillingAddress.City, @salesOrder.BillingAddress.State @salesOrder.BillingAddress.ZipPostalCode</div>
+                    </div>
+                </div>
+                }
+                @if (salesOrder.ShippingAddress != null) {
+                <div class="info-box address-box small">
+                    <div class="info-box-title">
+                        <span class="info-box-title-text">Shipping Address</span>
+                    </div>
+                    <div class="info-box-body">
+                        @if (!String.IsNullOrWhiteSpace(Model.ShippingAddress.Name)) {<div>@Model.ShippingAddress.Name</div>}
+                        @if (!String.IsNullOrWhiteSpace(Model.ShippingAddress.Address1)) {<div>@Model.ShippingAddress.Address1</div>}
+                        @if (!String.IsNullOrWhiteSpace(Model.ShippingAddress.Address2)) {<div>@Model.ShippingAddress.Address2</div>}
+                        @if (!String.IsNullOrWhiteSpace(Model.ShippingAddress.Address3)) {<div>@Model.ShippingAddress.Address3</div>}
+                        <div>@Model.ShippingAddress.City, @Model.ShippingAddress.State @Model.ShippingAddress.ZipPostalCode</div>
+                    </div>
+                </div>
+                }
+            </div>
+<style type="text/css">
+.line-items-table-spacer{
+    width:100%;
+    height:30px;
+}   
+.line-items-table{
+    width:100%;
+    margin-top:5px;
+}
+.product-header{
+    /*width:70%;*/
+}
+.grand-total-text, .additional-charge-value{
+    display:inline-block;
+}
+.total-column, .grand-total-text, .additional-charge-value{
+    width:100px;
+    text-align: left;
+}
+th, td{
+    text-align: left;
+}
+.total-container{
+    text-align: right;
+    margin-top:20px;
+}
+.grand-total-title-text{
+    font-weight:bold;
+}
+.line-items-table thead th{
+    background:whitesmoke;
+    border-bottom:1px solid gray;
+    padding:3px;
+}
+.line-items-table tr td{
+    padding:3px;
+    border-bottom:1px solid gray;
+}
+.page2{
+    page-break-before: always;
+}
+.line-items-table-container{
+    background-color: #f1f1f1;
+}
+</style>
+            <div class="line-items-table-spacer"></div>
+            <div class="line-items-table-container">
+                <div class="line-items-header-container">
+                    <span class="line-items-header-text">Line Items</span>
+                </div>
+                <table class="line-items-table">
+                    <thead>
+                        <tr>
+                            <th>Line #</th>
+                            <th class="product-header">Product</th>
+                            <th>Description</th>
+                            <th>Country of Origin</th>
+                            @*<th>Declare Value</th>*@
+                            <th>Schedule B</th>
+                            <th>Unit Price</th>
+                            <th>Qty</th>
+                            <th class="total-column">Total</th>
+                        </tr>
+                    </thead>
+                    
+                        @{
+                            double grandTotalPrice = 0;
+                            double subTotal = 0;
+                            double notDeclaredValueSubtotal = 0;
+                            var lineNumber = 0;
+                        }
+                        @foreach(var lineItem in salesOrder.LineItems)
+                        {
+                            ++lineNumber;
+                            var productName = lineItem.Product != null ? lineItem.Product.PartNumber : lineItem.ProductName;
+                            var price = lineItem.Price == null ? 0 : lineItem.Price;
+                            var priceAfterDiscount = (double)price;
+                            if(lineItem.DiscountPercent != null && lineItem.DiscountPercent > 0){
+                                priceAfterDiscount = ((double)price)*(100 - (double)lineItem.DiscountPercent)*.01;
+                            }
+                            var priceAfterDiscountNotDeclaredValue = priceAfterDiscount;
+                            if (lineItem.DeclaredValue != null)
+                            {
+                                priceAfterDiscount = (double)lineItem.DeclaredValue;
+                            }
+                            //only show this line item if it has items in this shipment
+                            //also, make sure to show only the quantity in this shipment
+                            int matchingInventoryItemsCount = 0;
+                            foreach(var box in Model.Boxes)
+                            {
+                                foreach(var boxInventoryItem in box.InventoryItems)
+                                {
+                                    if (boxInventoryItem.InventoryItem.ProductId == lineItem.ProductId)
+                                    {
+                                        matchingInventoryItemsCount++;
+                                    }
+                                }
+                            }
+                            if(matchingInventoryItemsCount == 0)
+                            {
+                                continue;
+                            }
+
+                            double itemTotalPrice, itemTotalPriceNotDeclaredValue;
+                            if(matchingInventoryItemsCount > 0){
+                                itemTotalPrice = priceAfterDiscount*(double)matchingInventoryItemsCount;
+                                itemTotalPriceNotDeclaredValue = priceAfterDiscountNotDeclaredValue * (double)matchingInventoryItemsCount;
+                            }
+                            else{
+                                itemTotalPrice = priceAfterDiscount;
+                                itemTotalPriceNotDeclaredValue = priceAfterDiscountNotDeclaredValue;
+                            }
+                            subTotal += itemTotalPrice;
+                            notDeclaredValueSubtotal += itemTotalPriceNotDeclaredValue;
+                            string countryOfOrigin = "";
+                            if(lineItem.CountryOfOrigin != null)
+                            {
+                                countryOfOrigin = lineItem.CountryOfOrigin.Value;
+                            }
+                            <tr>
+                                <td>@lineNumber</td>
+                                <td>@productName</td>
+                                <td>@(lineItem.Product != null ? lineItem.Product.Description : "")</td>
+                                <td>@countryOfOrigin</td>
+                                @*<td>@lineItem.DeclaredValue</td>*@
+                                <td>@lineItem.ScheduleB</td>
+                                <td>@salesOrder.CurrencyOption.Symbol@priceAfterDiscount.ToString("N2")</td>
+                                <td>@matchingInventoryItemsCount</td>
+                                <td>@salesOrder.CurrencyOption.Symbol@itemTotalPrice.ToString("N2")</td>
+                            </tr>
+                        }
+                        @{
+                            double computedSalesTax = 0, computedWireTransferFee = 0, computedShippingAndHandlingFee = 0, computedExpediteFee = 0, computedDiscount = 0, computedCreditCardFee = 0;
+                            var lineItemsTotalCost = (double)salesOrder.GetLineItemsTotalCost();
+                            var priceFraction = notDeclaredValueSubtotal / lineItemsTotalCost;
+
+                            if(salesOrder.DiscountType != null){
+                                computedDiscount = ((double)salesOrder.GetDiscountAmount())*priceFraction;
+                                subTotal -= computedDiscount;
+                            }
+
+                            grandTotalPrice = subTotal;
+
+                            if (salesOrder.SalesTax > 0){
+                                computedSalesTax = (double)salesOrder.SalesTax * priceFraction;
+                                grandTotalPrice += computedSalesTax;
+                            }
+                            if(salesOrder.WireTransferFee > 0){
+                                computedWireTransferFee = (double)salesOrder.WireTransferFee * priceFraction;
+                                grandTotalPrice += computedWireTransferFee;
+                            }
+                            if(salesOrder.CreditCardFee > 0){
+                                computedCreditCardFee = (double)salesOrder.CreditCardFee * priceFraction;
+                                grandTotalPrice += computedCreditCardFee;
+                            }
+                            if(salesOrder.ShippingAndHandlingFee > 0){
+                                computedShippingAndHandlingFee = (double)salesOrder.ShippingAndHandlingFee * priceFraction;
+                                grandTotalPrice += computedShippingAndHandlingFee;
+                            }
+                            if(salesOrder.ExpediteFee > 0){
+                                computedExpediteFee = (double)salesOrder.ExpediteFee * priceFraction;
+                                grandTotalPrice += computedExpediteFee;
+                            }
+                        }
+                        @if(computedDiscount != 0){
+                            <tr>
+                                <td>
+                                    <span>Discount</span>
+                                    @if(salesOrder.DiscountType == "PERCENT")
+                                    {
+                                    <span> - @salesOrder.DiscountAmount%</span>
+                                    }
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><span>@salesOrder.CurrencyOption.Symbol</span><span>(@computedDiscount.ToString("N2"))</span></td>
+
+                            </tr>
+                        }
+                    
+                </table>
+                <div class="total-container">
+                    <div class="additional-charge">
+                        <span class="additional-charge-title">Subtotal:</span>
+                        <span class="additional-charge-value">@salesOrder.CurrencyOption.Symbol@subTotal.ToString("N2")</span>
+                    </div>
+                    <div class="additional-charge">
+                        <span class="additional-charge-title">Sales Tax:</span>
+                        <span class="additional-charge-value">@salesOrder.CurrencyOption.Symbol@computedSalesTax.ToString("N2")</span>
+                    </div>
+                    <div class="additional-charge">
+                        <span class="additional-charge-title">Wire Transfer Fee:</span>
+                        <span class="additional-charge-value">@salesOrder.CurrencyOption.Symbol@computedWireTransferFee.ToString("N2")</span>
+                    </div>
+                    <div class="additional-charge">
+                        <span class="additional-charge-title">Shipping &amp; Handling:</span>
+                        <span class="additional-charge-value">@salesOrder.CurrencyOption.Symbol@computedShippingAndHandlingFee.ToString("N2")</span>
+                    </div>
+                    <div class="additional-charge">
+                        <span class="additional-charge-title">Expedite Fee:</span>
+                        <span class="additional-charge-value">@salesOrder.CurrencyOption.Symbol@computedExpediteFee.ToString("N2")</span>
+                    </div>
+                    <span class="grand-total-title-text">Grand Total: </span>
+                    <span class="grand-total-text">@salesOrder.CurrencyOption.Symbol@grandTotalPrice.ToString("N2")</span>
+                </div>
+            </div>
+            <div class="line-items-table-spacer"></div>
+            <div class="line-items-table-container">
+                <div class="line-items-header-container">
+                    <span class="line-items-header-text">Special Instructions</span>
+                </div>
+                <div style="margin-top:5px">
+                    @if(Model.CommercialInvoiceSpecialInstructions != null && Model.CommercialInvoiceSpecialInstructions != ""){
+                        <span>@Model.CommercialInvoiceSpecialInstructions</span>
+                    }
+                </div>
+            </div>
+<style type="text/css">
+.footer{
+    text-align: center;
+    padding-top:20px;
+}
+.footer h3{
+    font-size:25px;
+}
+</style>
+            <div class="footer">
+                <h3>Thank you for your business</h3>
+                <p>Should you have any questions concerning this invoice, please contact Maribel Lopez at 469-283-2117</p>
+                <p>1213 Executive Drive East, Richardson, Texas, 75081</p>
+                <p>Tel: 469-283-2117 Fax:  E-mail: AR@gidindustrial.com Web: www.gidindustrial.com</p>
+            </div>
+        </div>
+    </div>
+</div>

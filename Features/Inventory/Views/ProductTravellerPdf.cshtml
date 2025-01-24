@@ -1,0 +1,206 @@
+@model GidIndustrial.Gideon.WebApi.Models.InventoryItem
+
+<style>
+    * {
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+</style>
+<div>
+    <div>
+        <div class="header" style="">
+            <img style="width:131px; height:80px; opacity: .9;" src="@ViewBag.LogoUrl" />
+            <h1 style="text-align:center; margin: -35px 0 20px; line-height:1; color: gray;">Product Traveller</h1>
+        </div>
+        <div>
+            <style>
+                table {
+                    width:100%;
+                }
+                table th {
+                    color:white;
+                    background: gray;
+                    text-align: center;
+                }
+                table td {
+                    text-align: center;
+                }
+                table, th, td {
+                    border: 1px solid gray;
+                    border-collapse: collapse;
+                }
+            </style>
+            <table class="top">
+                <tr>
+                    <th>Customer</th>
+                    <th>Supplier</th>
+                    <th>Inventory Item Id</th>
+                    <th>Date</th>
+                </tr>
+                <tr>
+                    <td>
+                        @if(ViewBag.SalesOrder != null && ViewBag.SalesOrder.Company != null){
+                            <div>@ViewBag.SalesOrder.Company.Name</div>
+                        }
+                    </td>
+                    <td>
+                        @if(ViewBag.PurchaseOrder != null && ViewBag.PurchaseOrder.Supplier != null){
+                            <div>@ViewBag.PurchaseOrder.Supplier.Name</div>
+                        }
+                    </td>
+                    <td>@Model.Id</td>
+                    <td>@DateTime.Now.ToString("d")</td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <th style="width:25%">Part Number</th>
+                    <th style="width:25%">Serial Number</th>
+                    <th style="width:20%">Manufacturer</th>
+                    <th style="width:15%">Sales Order</th>
+                    <th style="width:15%">Purchase Order</th>
+                </tr>
+                <tr style="height:60px;">
+                    <td>
+                        @Model.Product.PartNumber
+                    </td>
+                    <td>
+                        <div>@Model.SerialNumber</div>
+                        <img src="@ViewBag.InventoryItemBarcode" style="width: 50px; height: 50px; outline:none;" />
+                    </td>
+                    <td>
+                        @if (Model.Manufacturer != null)
+                        {
+                            <span>@Model.Manufacturer.Name</span>
+                        } else if (Model.Product.Manufacturer != null)
+                        {
+                            <span>@Model.Product.Manufacturer.Name</span>
+                        }
+                    </td>
+                    <td>
+                        @if (ViewBag.SalesOrderBarcode != null)
+                        {
+                            <div>@ViewBag.SalesOrder.Id</div>
+                            <img src="@ViewBag.SalesOrderBarcode" style="width: 50px; height: 50px; outline:none;" />
+                        }
+                    </td>
+                    <td>
+                        @if (ViewBag.PurchaseOrderBarcode != null)
+                        {
+                            <div>@ViewBag.PurchaseOrder.Id</div>
+                            <img src="@ViewBag.PurchaseOrderBarcode" style="width: 50px; height: 50px; outline:none;" />
+                        }
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <th>Notes</th>
+                </tr>
+                @for(var i = 0; i < 7; ++i){
+                <tr style="height:20px;">
+                    <td></td>
+                </tr>
+                }
+            </table>
+            <style>
+                .usage-report .part-num-row{
+                    height: 20px;
+                }
+                .part-row{
+                    height:60px;
+                }
+                table.usage-report {
+                    border:none;
+                }
+                .part-row td{
+                    width:50%;
+                }
+                .part-row td{
+                    vertical-align: center;
+                }
+                .part-row img{
+                    margin: 3px 5px;
+                    width: 55px;
+                    height: 55px;
+                }
+            </style>
+            <table class="usage-report">
+                <tr>
+                    <th colspan="10">Usage Report</th>
+                </tr>
+                <tr>
+                    <td style="border:none;padding:0;">
+                        <table style="margin-right:1px; border-right: 1px solid black;">
+                            <tr>
+                                <td>Part #</td>
+                                <td>Qty</td>
+                            </tr>
+                            @for(var i = 0; i < 7; ++i){
+                            <tr class="part-row">
+                                <td class="part-num"></td>
+                                <td class="qty">
+                                    <img src="@ViewBag.NumpadUrl"/>
+                                    <img src="@ViewBag.NumpadUrl"/>
+                                </td>
+                            </tr>
+                            }
+                        </table>
+                    </td>
+                    <td style="border:none;padding:0;">
+                        <table style="margin-left:1px; border-left: 1px solid black;">
+                            <tr>
+                                <td>Part #</td>
+                                <td>Qty</td>
+                            </tr>
+                            @for(var i = 0; i < 7; ++i){
+                            <tr class="part-row">
+                                <td class="part-num"></td>
+                                <td class="qty">
+                                    <img src="@ViewBag.NumpadUrl"/>
+                                    <img src="@ViewBag.NumpadUrl"/>
+                                </td>
+                            </tr>
+                            }
+                        </table>
+                    </td>
+                    <td style="border:none;padding:0;">
+                        <table style="margin-left:1px; border-left: 1px solid black;">
+                            <tr>
+                                <td>Part #</td>
+                                <td>Qty</td>
+                            </tr>
+                            @for(var i = 0; i < 7; ++i){
+                            <tr class="part-row">
+                                <td class="part-num"></td>
+                                <td class="qty">
+                                    <img src="@ViewBag.NumpadUrl"/>
+                                    <img src="@ViewBag.NumpadUrl"/>
+                                </td>
+                            </tr>
+                            }
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <th>Work Log</th>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td style="width: 25%">Name</td>
+                    <td style="width: 55%">Activity</td>
+                    <td style="width: 20%">Date</td>
+                </tr>
+                @for(var i = 0; i < 6; ++i){
+                <tr style="height:20px;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

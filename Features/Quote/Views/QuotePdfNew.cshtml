@@ -1,0 +1,1122 @@
+﻿@model GidIndustrial.Gideon.WebApi.Models.Quote
+
+@{
+    string pageHeight = "";
+
+    @if (Model.LineItems.Count < 8)
+    { pageHeight = "min-height: 1702px;"; }
+    else if (Model.LineItems.Count >= 8 && Model.LineItems.Count < 22)
+    { pageHeight = "min-height: 3541px;"; }
+    else
+    { pageHeight = "min-height: 5387px;"; }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quote - GID Industrial</title>
+  
+  
+</head>
+
+
+
+<style type="text/css">
+@@font-face {
+  font-family: Montserrat;
+  src: url("@ViewData["Font1"]");
+  font-weight: 400;
+}
+
+@@font-face {
+  font-family: Montserrat;
+  src: url("@ViewData["Font2"]");
+  font-weight: 500;
+}
+
+@@font-face {
+  font-family: Montserrat;
+  src: url("@ViewData["Font3"]");
+  font-weight: 600;
+}
+
+@@font-face {
+  font-family: Montserrat;
+  src: url("@ViewData["Font4"]");
+  font-weight: 700;
+}
+
+.row-center-unset {
+  display: flex;
+  align-items: center;
+}
+
+.row-center-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pad-right
+{
+    margin-right: 55px;
+}
+
+.row-center-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.row-center-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.col-center-center{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.col-between{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+* {
+  box-sizing: border-box;
+}
+
+
+body,
+h1,
+h2,
+p {
+  margin: 0px;
+}
+
+
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+li,
+h1,
+input,
+p,
+span,
+h2,
+a,
+span,
+label,
+textarea,
+button,
+select {
+ /* font-family: Montserrat;*/
+ font-family: Arial;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.section-title {
+  color: #0c0c24;
+  font-size: 52px;
+  font-weight: 700;
+  line-height: normal;
+  
+}
+
+.navbar {
+  padding: 25px 60px;
+}
+
+.menu,
+.menu-content {
+  display: none;
+}
+
+.navbar-left {
+  height: 38px;
+}
+
+.navbar-left img {
+  height: 100%;
+}
+
+.navbar-center {
+  list-style: none;
+  gap: 40px;
+  margin: 0;
+}
+
+.navbar-center a {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 150%;
+  color: #0c0c24;
+}
+
+.navbar-right {
+  gap: 16px;
+}
+
+.navbar-right img {
+  width: 61px;
+}
+
+.navbar-right a {
+  color: #0c0c24;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+.footer {
+  background-color: #0c0c24;
+  padding: 32px 60px 28px;
+}
+
+.footer-content > div:nth-child(1) img {
+  width: 207px;
+}
+
+.footer-menu {
+  gap: 40px;
+}
+
+.footer-menu a {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.footer-second-menu {
+  gap: 40px;
+  margin-top: 32px;
+}
+
+.footer-second-menu p {
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 150%;
+  margin-left: 8px;
+}
+
+.footer-second-menu img {
+  height: 20px;
+}
+
+.divider {
+  height: 1px;
+  opacity: 0.2;
+  background-color: #fff;
+  margin-top: 32px;
+  margin-bottom: 33px;
+}
+
+.footer-end p {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.footer-end > div {
+  gap: 16px;
+}
+
+.footer-end div div {
+  width: 1px;
+  opacity: 0.2;
+  background-color: #fff;
+  height: 17px;
+}
+
+.footer-end a {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  display: none;
+}
+
+.modal-content {
+  padding: 44px;
+  border-radius: 12px;
+  background: #fff;
+  height: max-content;
+  margin: 40px 0px;
+}
+
+.close-modal {
+  width: 24px;
+  cursor: pointer;
+}
+
+@@media only screen and (max-width: 768px) {
+  .section-title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: normal;
+  }
+
+  .block {
+    display: block;
+    height: 45px;
+  }
+
+  .navbar {
+    padding: 15px 16px;
+  }
+
+  .navbar-center,
+  .navbar-right {
+    display: none;
+  }
+
+  .menu {
+    display: block;
+    width: 24px;
+  }
+
+  .menu-content {
+    display: block;
+    height: 0px;
+    overflow: hidden;
+    transition: all 0.5s;
+  }
+
+  .menu-content > div {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    gap: 20px;
+  }
+
+  .menu-content a {
+    color: #0c0c24;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 150%;
+  }
+
+  .menu-content > div > div {
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .menu-content > div img {
+    width: 61px;
+  }
+
+  .menu-content > div > div a {
+    color: #0c0c24;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: capitalize;
+  }
+
+  .footer {
+    padding: 40px 16px;
+  }
+
+  .footer-content > div,
+  .footer-menu {
+    flex-direction: column;
+  }
+
+  .footer-menu {
+    margin-top: 40px;
+    gap: 20px;
+  }
+
+  .footer-second-menu {
+    gap: 40px;
+    margin-top: 40px;
+  }
+
+  .divider {
+    margin-top: 40px;
+    margin-bottom: 33px;
+  }
+
+  .footer-end {
+    flex-direction: column-reverse !important;
+    gap: 21px;
+    width: 75%;
+    margin: 0 auto;
+  }
+
+  .footer-end p {
+    text-align: center;
+  }
+
+  .modal-content {
+    padding: 30px 16px;
+  }
+}
+
+section{
+    margin: 0 auto;
+}
+/* header */
+.header{
+    padding: 30px 60px;
+    background:  #0C0C24;
+}
+.header img{
+    -webkit-filter: brightness(10);
+    filter: brightness(10);
+}
+.header-text p{
+    color: #FFF;
+    /* font-family: "HK Grotesk"; */
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+}  
+
+/* page-content */
+.page-content{
+    padding: 30px 60px 40px;
+        /* background: #F7F7FB;*/
+   background: white;
+
+    
+}
+.sales-order{
+    color:  #0C0C24;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 30px;
+}
+.sales-order a{
+    color:  #070490;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+.row-ìnformation{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 20px;
+}
+ .card{
+    width: 100%;
+    border-radius: 8px;
+    background:  #FFF;
+}
+ .card .card-header{
+    min-width: 427px;
+    background: rgba(7, 4, 144, 0.08);
+    padding: 16px 0px 16px 24px ;
+    border-radius: 8px 8px 0px 0px;
+}
+ .card .card-header p{
+    color:  #0C0C24;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: capitalize;
+}
+.card-content-table{
+        /* padding: 16px 24px;*/
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+    .card-content {
+         padding: 16px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .card-content-banking {
+        padding: 16px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        background: #F9F9F9;
+    }
+
+    .card2 {
+        width: 375px;
+        border-radius: 8px;
+        background: #FFF;
+    }
+
+        .card2 .card-header {
+            min-width: 375px;
+            background: rgba(7, 4, 144, 0.08);
+            padding: 16px 0px 16px 24px;
+            border-radius: 8px 8px 0px 0px;
+        }
+
+            .card2 .card-header p {
+                color: #0C0C24;
+                font-size: 20px;
+                font-style: normal;
+                font-weight: 800;
+                line-height: normal;
+                text-transform: capitalize;
+            }
+
+    .card2-content {
+        padding: 16px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        background: #F7F7F7;
+        min-height: 130px;
+    }
+
+.label-bold{
+    color: #333;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 150%;
+}
+.label-normal{
+    color: #333;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+}
+.label-20{
+    font-size: 20px !important;
+}
+.row-address{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 20px;
+}
+.row-address .card{
+    min-width: 650px;
+    border-radius: 8px;
+    background:  #FFF;
+}
+
+/* line-items */
+.line-items{
+    margin-bottom: 24px;
+}
+.line-items-list{
+    border-radius: 8px;
+    border: 1px solid #EDEDED;
+}
+.line-items-list-header{
+    border-bottom: 1px solid #EDEDED;
+    padding: 6px 0px;
+
+}
+.line-items-list-header .header-item{
+    padding: 12px 16px;
+}
+.line-items-list-header .header-item p{
+    color:  #333;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 150%;
+}
+.line-items-list-item{
+    padding: 6px 0px;
+
+    border-right: 1px solid var(--web-light-grey, #EDEDED);
+    border-bottom: 1px solid var(--web-light-grey, #EDEDED);
+    border-left: 1px solid var(--web-light-grey, #EDEDED);
+
+   /*  background-color: lightgray; */
+}
+
+    .list-item .group-item:nth-child(odd) {
+        background-color: #F2F2F2;
+    }
+
+    .list-item .group-item:nth-child(even) {
+        background-color: #F9F9F9;
+    }
+
+
+
+.line-items-list-item .item{
+    padding: 8px 12px;
+}
+.line-items-list-item .item p{
+    color:  #333;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+}
+.line-items-list-description{
+
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-right: 1px solid var(--web-light-grey, #EDEDED);
+    border-bottom: 1px solid var(--web-light-grey, #EDEDED);
+    border-left: 1px solid var(--web-light-grey, #EDEDED);
+    min-height: 40px;
+        /* background-color: lightgray; */
+}
+
+    #Product {
+        min-width: 180px;
+    }
+
+    #Manufacturer {
+        min-width: 180px;
+    }
+
+    #Description {
+        min-width: 189px;
+    }
+
+    #Lead-time {
+        min-width: 190px;
+    }
+
+    #Warranty {
+        min-width: 170px;
+    }
+
+    #Condition {
+        min-width: 180px;
+    }
+#Price{
+   min-width: 120px;
+        /*text-align: end;*/
+}
+#Price p{
+            /*text-align: end;*/
+}
+#Quantity{
+    min-width: 30px;
+        /*text-align: end;*/
+}
+#Quantity p{
+    text-align: end;
+}
+#Total{
+    min-width: 100px;
+        text-align: end;
+ }
+ #Total p{
+    text-align: end;
+ }
+ .line-items-total{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+.line-items-total-detail{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 286px;
+    margin-left: 750px;
+    margin-right: 15px;
+    margin-top: 20px;
+}
+/* bank */
+.bank-info{
+    display: flex;
+    justify-content: space-between;
+}
+.comerica-bank{
+    padding: 17px 0px;
+    min-width: 616px;
+    border-radius: 8px;
+    background: #F9F9F9;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.comerica-bank p{
+    color:  #333;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+}
+.comerica-bank-info p{
+    color: #333;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+}
+.bank-info .card-content{
+    min-width: 602px;
+}
+.card-description p{
+    color:  #333;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+}
+
+    .table-items-list {
+        border-radius: 8px;
+        border: 1px solid #EDEDED;
+        border-bottom: none;
+        border-spacing: 0;
+        border-collapse: separate;
+        width: 100%;
+    }
+
+        .table-items-list tr:last-child td:first-child {
+            border-bottom-left-radius: 8px;
+        }
+
+        .table-items-list tr:last-child td:last-child {
+            border-bottom-right-radius: 8px;
+        }
+
+    tbody:nth-child(even) {
+        background: #F7F7F7;
+    }
+
+    tbody:nth-child(odd) {
+        background: #F9F9F9;
+    }
+
+
+
+        .table-items-list th {
+            border-bottom: 1px solid #EDEDED;
+            text-align: left;
+            padding: 18px 16px;
+            color: #333;
+            font-family: Arial;/*Montserrat;*/
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 800;
+            line-height: 150%;
+        }
+
+        .table-items-list td {
+            border-bottom: 1px solid #EDEDED;
+            text-align: left;
+            padding: 18px 16px;
+            color: #333;
+        font-family: Arial; /*Montserrat;*/
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 150%;
+        }
+
+    tbody {
+        /* page-break-inside: avoid */
+    }
+
+    thead{
+        background: #F9F9F9;
+    }
+
+  
+</style>
+
+<body>
+    <section>
+        <div class="header row-center-between">
+            <div>
+                <img src="@ViewData["LogoUrlNew"]" alt="">
+            </div>
+            <div class="header-text">
+                <p>@Model.GidLocationOption.MainAddress.Name</p>
+                <p>@Model.GidLocationOption.MainAddress.Address1</p>
+                @if (Model.GidLocationOption.MainAddress.Address2 != null)
+                {
+                    <p>@Model.GidLocationOption.MainAddress.Address2</p>
+                }
+                <p>@Model.GidLocationOption.MainAddress.City, @Model.GidLocationOption.MainAddress.State @Model.GidLocationOption.MainAddress.ZipPostalCode</p>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="page-content">
+            <p class="sales-order">Quote #@Model.Id</p>
+            <div class="row-ìnformation ">
+                <div class="card2">
+                    <div class="card-header">
+                        <p>Information</p>
+                    </div>
+                    <div class="card2-content">
+                        <div class="card-item row-center-between">
+                            <p class="label-normal">Created</p>
+                            <p class="label-normal">@Model.CreatedAt.Value.ToString("d")</p>
+                        </div>
+                        <div class="card-item row-center-between">
+                            <p class="label-normal">Expires</p>
+                            <p class="label-normal">@Convert.ToDateTime(Model.Expiration).ToString("d")</p>
+                        </div>
+                        @if (Model.ShippingMethod != null)
+                        {
+                            if (Model.ShippingMethod.Value != "FOB Richardson TX USA")
+                            {
+                                <div class="card-item row-center-between">
+                                    <p class="label-normal">Shipping method</p>
+                                    <p class="label-normal">@Model.ShippingMethod.Value</p>
+                                </div>
+                            }
+                        }
+                        @if (Model.PaymentTerm != null)
+                        {
+                            <div class="card-item row-center-between">
+                                <p class="label-normal">Payment terms</p>
+                                <p class="label-normal">@Model.PaymentTerm.Name</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="card2">
+                    <div class="card-header">
+                        <p>Prepared for</p>
+                    </div>
+                    <div class="card2-content">
+                        <div class="card-item row-center-between">
+                            @* <p class="label-normal">Name</p> *@
+                            <p class="label-normal">@Model.Contact.FirstName @Model.Contact.LastName</p>
+                        </div>
+
+                        @if (Model.Company != null && Model.Company.Name != null && Model.Company.Name != "")
+                        {
+                            <div class="card-item row-center-between">
+                                @* <p class="label-normal">Company</p> *@
+                                <p class="label-normal">@Model.Company.Name</p>
+                            </div>
+                        }
+
+                        <div class="card-item row-center-between">
+                            @* <p class="label-normal">Email</p> *@
+                            <p class="label-normal">@Model.Email.ToLower()</p>
+                        </div>
+                        <div class="card-item row-center-between">
+                            @* <p class="label-normal">Phone</p> *@
+                            <p class="label-normal">@Model.PhoneNumberFormatted</p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card2">
+                    <div class="card-header">
+                        <p>Prepared by</p>
+                    </div>
+                    <div class="card2-content">
+                        <div class="card-item row-center-between">
+                            @* <p class="label-normal">Name</p> *@
+                            <p class="label-normal">@Model.SalesPerson.FirstName @Model.SalesPerson.LastName</p>
+                        </div>
+                        <div class="card-item row-center-between">
+                           @*  <p class="label-normal">Email</p> *@
+                            <p class="label-normal">@Model.SalesPerson.Email.ToLower()</p>
+                        </div>
+                        <div class="card-item row-center-between">
+                            @* <p class="label-normal">Work Phone</p> *@
+                            <p class="label-normal">w) @Model.SalesPerson.WorkPhone</p>
+                        </div>
+                        <div class="card-item row-center-between">
+                            @* <p class="label-normal">Mobile Phone</p> *@
+                            <p class="label-normal">m) @Model.SalesPerson.MobilePhone</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="line-items">
+                <div class="card">
+                    <div class="card-header">
+                        <p>Line items</p>
+                    </div>
+                    <div class="card-content-table">
+
+ @{
+                            double grandTotalPrice = 0;
+                            double subTotal = 0;
+ }
+
+                        <table class="table-items-list" style="overflow: visible !important;background: none !important;">
+                            <thead style="display: table-header-group; page: auto; background: none !important;">
+                            <tr>
+                                <th id="Product">Product</th>
+                                <th id="Manufacturer">Manufacturer</th>
+                                <th id="Condition">Condition</th>
+                                <th id="Lead-time">Lead-Time</th>
+                                <th id="Warranty">Warranty</th>
+                                <th id="Price">Cost</th>
+                                <th id="Quantity">Qty</th>
+                                <th id="Total">Total</th>
+                            </tr>
+                            </thead>
+
+
+                            @foreach (var lineItem in Model.LineItems)
+                                        {
+                                            var productName = lineItem.Product != null ? lineItem.Product.PartNumber : lineItem.ProductName;
+                                            if (lineItem.DisplayPartNumber != null && lineItem.DisplayPartNumber != "")
+                                            {
+                                                productName = lineItem.DisplayPartNumber;
+                                            }
+                                            var price = lineItem.Price == null ? 0 : lineItem.Price;
+                                            var priceAfterDiscount = (double)price;
+                                            if (lineItem.DiscountPercent != null && lineItem.DiscountPercent > 0)
+                                            {
+                                                priceAfterDiscount = ((double)price) * (100 - (double)lineItem.DiscountPercent) * .01;
+                                            }
+                                            double itemTotalPrice;
+                                            if (lineItem.Quantity > 0)
+                                            {
+                                                itemTotalPrice = priceAfterDiscount * (double)lineItem.Quantity;
+                                            }
+                                            else
+                                            {
+                                                itemTotalPrice = priceAfterDiscount;
+                                            }
+                                            subTotal += itemTotalPrice;
+                                            var description = lineItem.Description ?? "";
+                                            if (description == "" && lineItem.Product != null && lineItem.Product.Description != null)
+                                            {
+                                                description = lineItem.Product.Description;
+                                            }
+
+                                <tbody>
+                                <tr>
+                                        <td id="Product">@productName</td>
+                                        <td id="Manufacturer">@(lineItem.Product.Manufacturer != null ? lineItem.Product.Manufacturer.Name : "")</td>
+                                        <td id="Condition">@(lineItem.Condition != null ? lineItem.Condition.Value : "")</td>
+                                        <td id="Lead-time">@(lineItem.LeadTime != null ? lineItem.LeadTime.Value : "")</td>
+                                        <td id="Warranty">@(lineItem.Warranty != null ? lineItem.Warranty.Value : "")</td>
+                                        <td id="Price">@Model.CurrencyOption.Symbol@priceAfterDiscount.ToString("N2")</td>
+                                        <td id="Quantity">@lineItem.Quantity</td>
+                                        <td id="Total">@Model.CurrencyOption.Symbol@itemTotalPrice.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8" id="Description">
+                                        @description
+                                    </td>
+                                </tr>
+                                </tbody>
+
+                                            }
+
+
+
+                            @{
+                                grandTotalPrice = subTotal;
+                                if (Model.SalesTax > 0)
+                                {
+                                    grandTotalPrice += (double)Model.SalesTax;
+                                }
+                                else
+                                {
+                                    Model.SalesTax = 0;
+                                }
+                                if (Model.WireTransferFee > 0)
+                                {
+                                    grandTotalPrice += (double)Model.WireTransferFee;
+                                }
+                                else
+                                {
+                                    Model.WireTransferFee = 0;
+                                }
+                                if (Model.CreditCardFee > 0)
+                                {
+                                    grandTotalPrice += (double)Model.CreditCardFee;
+                                }
+                                else
+                                {
+                                    Model.CreditCardFee = 0;
+                                }
+                                if (Model.ShippingAndHandlingFee > 0)
+                                {
+                                    grandTotalPrice += (double)Model.ShippingAndHandlingFee;
+                                }
+                                else
+                                {
+                                    Model.ShippingAndHandlingFee = 0;
+                                }
+                                if (Model.ExpediteFee > 0)
+                                {
+                                    grandTotalPrice += (double)Model.ExpediteFee;
+                                }
+                                else
+                                {
+                                    Model.ExpediteFee = 0;
+                                }
+                            }
+                           
+                        </table>
+
+
+
+
+                        <div class="line-items-total">
+                            <div class="line-items-total-detail">
+                                <div class="line-items-total-detail-row row-center-between">
+                                    <p class="label-normal">Subtotal</p>
+                                    <p class="label-bold">@Model.CurrencyOption.Symbol@subTotal.ToString("N2")</p>
+                                </div>
+                                @if (Model.SalesTax.HasValue && Model.SalesTax.Value > 0)
+                                { 
+                                    <div class="line-items-total-detail-row row-center-between">
+                                        <p class="label-normal">Sales Tax</p>
+                                        <p class="label-bold">@Model.CurrencyOption.Symbol@Model.SalesTax.Value.ToString("N2")</p>
+                                    </div>
+                                }
+                                @if (Model.WireTransferFee.HasValue && Model.WireTransferFee.Value > 0)
+                                {
+                                    <div class="line-items-total-detail-row row-center-between">
+                                        <p class="label-normal">Wire Transfer Fee</p>
+                                        <p class="label-bold">@Model.CurrencyOption.Symbol@Model.WireTransferFee.Value.ToString("N2")</p>
+                                    </div>
+                                }
+                                @if (Model.CreditCardFee.HasValue && Model.CreditCardFee.Value > 0)
+                                {
+                                    <div class="line-items-total-detail-row row-center-between">
+                                        <p class="label-normal">Credit Card Fee</p>
+                                        <p class="label-bold">@Model.CurrencyOption.Symbol@Model.CreditCardFee.Value.ToString("N2")</p>
+                                    </div>
+                                }
+                                
+                                <div class="line-items-total-detail-row row-center-between">
+                                    <p class="label-normal">Shipping & Handling</p>
+                                    <p class="label-bold">@Model.ShippingAndHandlingDisplay</p>
+                                </div>
+                                @if (Model.ExpediteFee.HasValue && Model.ExpediteFee.Value > 0)
+                                {
+                                    <div class="line-items-total-detail-row row-center-between">
+                                        <p class="label-normal">Expedite Fee</p>
+                                        <p class="label-bold">@Model.CurrencyOption.Symbol@Model.ExpediteFee.Value.ToString("N2")</p>
+                                    </div>
+                                }
+
+                                <div class="line-items-total-detail-row row-center-between">
+                                    <p class="label-bold label-20">Grand total</p>
+                                    <p class="label-bold label-20">@Model.CurrencyOption.Symbol@grandTotalPrice.ToString("N2")</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-header">
+                    <p>Banking info</p>
+                </div>
+                <div class="card-content-banking">
+                    @{
+                        if (Model.GidLocationOptionId != 2)
+                        {
+                            <div class="bank-info">
+                                <div class="comerica-bank">
+                                    <p>Comerica Bank</p>
+                                    <div class="comerica-bank-info">
+                                        <p>910 E. Campbell Rd.  </p>
+                                        <p>Richardson, TX 75081</p>
+                                        <p>USA</p>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-item row-center-between pad-right">
+                                        <p class="label-normal">Beneficiary</p>
+                                        <p class="label-bold">GID Holdings LLC</p>
+                                    </div>
+                                    <div class="card-item row-center-between pad-right">
+                                        <p class="label-normal">Account number</p>
+                                        <p class="label-bold">1883398107</p>
+                                    </div>
+                                    <div class="card-item row-center-between pad-right">
+                                        <p class="label-normal">Routing number</p>
+                                        <p class="label-bold">111000753</p>
+                                    </div>
+                                    <div class="card-item row-center-between pad-right">
+                                        <p class="label-normal">SWIFT code</p>
+                                        <p class="label-bold">MNBDUS33</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                        else
+                        {
+                            <div class="bank-info">
+                                <div class="comerica-bank">
+                                    <p>AIB Bank</p>
+                                    <div class="comerica-bank-info">
+                                        <p>Dublin 1</p>
+                                        <p>Ireland</p>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-item row-center-between pad-right">
+                                        <p class="label-normal">Beneficiary</p>
+                                        <p class="label-bold">GID Industrial (Europe), Ltd.</p>
+                                    </div>
+                                    <div class="card-item row-center-between pad-right">
+                                        <p class="label-normal">IBAN</p>
+                                        <p class="label-bold">IE66AIBK93730431191022</p>
+                                    </div>
+                                    <div class="card-item row-center-between pad-right">
+                                        <p class="label-normal">SWIFT Code</p>
+                                        <p class="label-bold">AIBKIE2D</p>
+                                    </div>
+                                    <div class="card-item row-center-between pad-right">
+                                        <p class="label-normal">Sort Code</p>
+                                        <p class="label-bold">93-73-04</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+                    }
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content-banking card-description">
+                    <p>Terms and Conditions can be found on the next page.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>

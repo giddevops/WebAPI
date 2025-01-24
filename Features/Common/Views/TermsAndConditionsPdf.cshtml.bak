@@ -1,0 +1,362 @@
+﻿@model GidIndustrial.Gideon.WebApi.Models.GidLocationOption
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quote - Industrial Trading</title>
+
+
+</head>
+
+<style type="text/css">
+    @@font-face {
+        font-family: Montserrat;
+        src: url("@ViewData["Font1"]");
+        font-weight: 400;
+    }
+
+    @@font-face {
+        font-family: Montserrat;
+        src: url("@ViewData["Font2"]");
+        font-weight: 500;
+    }
+
+    @@font-face {
+        font-family: Montserrat;
+        src: url("@ViewData["Font3"]");
+        font-weight: 600;
+    }
+
+    @@font-face {
+        font-family: Montserrat;
+        src: url("@ViewData["Font4"]");
+        font-weight: 700;
+    }
+
+    .row-center-unset {
+        display: flex;
+        align-items: center;
+    }
+
+    .row-center-between {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .pad-right {
+        margin-right: 45px;
+    }
+
+    .row-center-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .row-center-end {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .col-center-center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .col-between {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+        .table-items-list tr:last-child td:first-child {
+            border-bottom-left-radius: 8px;
+        }
+
+    .navbar-right {
+        gap: 16px;
+    }
+
+        .navbar-right img {
+            width: 61px;
+        }
+
+        .navbar-right a {
+            color: #0c0c24;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: normal;
+            text-transform: capitalize;
+        }
+
+    .footer {
+        background-color: #0c0c24;
+        padding: 32px 60px 28px;
+    }
+
+    .footer-content > div:nth-child(1) img {
+        width: 207px;
+    }
+
+    .footer-menu {
+        gap: 40px;
+    }
+
+        .footer-menu a {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 150%;
+        }
+
+    .footer-second-menu {
+        gap: 40px;
+        margin-top: 32px;
+    }
+
+        .footer-second-menu p {
+            color: #fff;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 150%;
+            margin-left: 8px;
+        }
+
+        .footer-second-menu img {
+            height: 20px;
+        }
+
+    .divider {
+        height: 1px;
+        opacity: 0.2;
+        background-color: #fff;
+        margin-top: 32px;
+        margin-bottom: 33px;
+    }
+
+    .footer-end p {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    .footer-end > div {
+        gap: 16px;
+    }
+
+    .footer-end div div {
+        width: 1px;
+        opacity: 0.2;
+        background-color: #fff;
+        height: 17px;
+    }
+
+    .footer-end a {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.2);
+        overflow: auto;
+        display: flex;
+        justify-content: center;
+        display: none;
+    }
+
+    section {
+        margin: 0 auto;
+    }
+    /* header */
+    /* header */
+    .header {
+        padding: 30px 60px;
+        background: #0C0C24;
+    }
+
+        .header img {
+            -webkit-filter: brightness(10);
+            filter: brightness(10);
+        }
+
+    .header-text p {
+        color: #FFF;
+        /* font-family: "HK Grotesk"; */
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+    }
+
+    .page-content {
+        margin: 0 auto;
+        width: fit-content;
+        padding: 20px 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .page-content h3 {
+            font-family: Montserrat;
+            color: #0C0C24;
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            margin-bottom: 8px;
+        }
+
+    .terms-description {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        max-width: 992px;
+        font-size: 12px;
+    }
+
+</style>
+
+<body>
+    <section>
+        <div class="header row-center-between">
+            <div>
+                <img src="@ViewData["LogoUrlNew"]" alt="">
+            </div>
+            <div class="header-text">
+                <p>@Model.MainAddress.Name</p>
+                <p>@Model.MainAddress.Address1</p>
+                @if (Model.MainAddress.Address2 != null)
+                {
+                    <p>@Model.MainAddress.Address2</p>
+                }
+                <p>@Model.MainAddress.City, @Model.MainAddress.State @Model.MainAddress.ZipPostalCode</p>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="page-content">
+            <h3>Terms and conditions</h3>
+            <div class="terms-description">
+                <p>
+                All purchase orders between you, the buyer, (the “Company”) and GID Holdings, LLC (dba GID Industrial) (the “Distributor”) for goods (the “Product(s)”) shall be subject to the terms
+                and conditions of sale contained herein (the “Agreement”). By placing a purchase order with the Distributor or accepting delivery of Products from the Distributor, the
+                Company acknowledges that it has reviewed this Agreement and accepts these terms and conditions. The date the purchase order is placed shall be deemed the “Effective
+                Date”.<br/><br/>
+                    1. <u>Purchase Orders.</u> No purchase order placed with the Distributor by the Company (“Purchase Order”) shall become binding upon the Distributor until the Distributor
+                acknowledges or ships against a Purchase Order. The terms and conditions of this Agreement, which also shall govern online purchases, shall supersede any conflicting or
+                additional terms and conditions contained within the Purchase Order, and such additional terms are hereby expressly rejected. If there is a conflict between the Terms of Use
+                and other agreements, including this Agreement, then those other agreements and this Agreement shall prevail.<br />
+                    2. <u>
+                        Pricing.
+                    </u> Prices shall be as quoted by Distributor and are subject to change. All payments for Products purchased hereunder shall be made in U.S. dollars. The
+                Company shall remit payment to the Distributor within thirty (30) days of its receipt of the invoice from the Distributor. The Company shall receive a one (1%) percent cash
+                    discount for payments received by the Distributor within ten (10) days of the Company’s receipt of the invoice.<br />
+                        3. <u>
+                            Delivery and Title.
+                        </u> Title, risk of loss and the shipment of Products shall be EXW Distributor’s facility (Incoterms 2020). All delivery dates are good faith estimates
+                    only.<br />
+                            4. <u>
+                                Quality.
+                            </u> All Products must be inspected by the Company within thirty (30) business days of delivery. Any Products not rejected at that time are deemed accepted by
+                    the Company.<br />
+                                5. <u>
+                                    Non-Conforming Products.
+                                </u> In the event that Product does not conform to the warranty set forth in Section 7 (“Non-Conforming Products”), the Distributor, in its sole
+                option, shall (i) repair or replace the Non-Conforming Product or (ii) issue a credit equal to the actual purchase price of the Non-Conforming Product paid by the Company.
+                    This section, along with Section 8 below, sets forth the Distributor’s sole liability and the Company’s exclusive remedy for any action that is brought against the Distributor.<br />
+                                    6. <u>
+                                        Returns/Changes.
+                                    </u> All Purchase Orders placed with the Distributor by the Company and all Products are non-cancellable and non-returnable, 
+                                    except in the case of Non-Conforming Products. Open
+                    Purchase Orders may not be modified, except with the Distributor’s written consent.<br />
+                                        7. <u>
+                                            Warranty.
+                                        </u> The Distributor warrants for a period of thirty (30) days (unless stated otherwise on the Purchase Order Confirmation) from delivery to the Company that all Products covered by this Agreement shall conform to the
+                specifications contained in the Purchase Order. Except as set forth in the prior sentence, the Distributor makes no other warranty, express or implied and all other warranties
+                    are expressly disclaimed by Distributor.<br />
+                                            8. <u>
+                                                Indemnification.
+                                            </u> The Distributor’s indemnification of the Company shall be limited solely to any and all liabilities, expenses, losses, damages, claims, fines, penalties
+                and costs (including all reasonable attorneys’ fees whether incurred by the Company or awarded against the Company) as a result of any bodily injury to or death of any
+                person or damage to any property caused by the gross negligence or willful misconduct of the Distributor or its personnel in performance of this Agreement. All other
+                indemnities are specifically disclaimed by the Distributor. The Company shall indemnify and hold harmless the Distributor and its customers, officers, directors, agents and
+                employees from and against any and all claims, demands, losses, costs, expenses (including reasonable attorneys’ fees) and liabilities of any kind, which may be asserted or
+                suffered on the grounds that the item, which is of the Company’s design or specification: (i) infringes on any copyright or patent; misappropriates a trade secret; or
+                    otherwise violates an intellectual property right of a third party, or (ii) causes any bodily injury to or death of any person or damage to any property.<br />
+                                                9. <u>
+                                                    Limitation of Liability.
+                                                </u> Notwithstanding anything to the contrary contained herein, in no event shall the Distributor be liable to the Company or any third
+                party under any statute or under any legal or equitable theory, for consequential, special, indirect, incidental, punitive or exemplary losses, damages or expenses,
+                or for lost profits, lost business, or for lost opportunities, whether arising out of a breach of contract, tort (including negligence) or otherwise, and regardless of
+                whether the Company has been advised of the possibility of such damages. Further, the Distributor shall not have any liability to the Company or any third party
+                for any failure or delay due to matters beyond its reasonable control. In no event shall the Distributor’s total liability, including but not limited to direct damages,
+                to the Company exceed the amount paid to the Distributor by the Company for the Product that gave rise to an indemnifiable claim hereunder. The foregoing
+                    limitations shall apply even if the Company’s remedies under this Agreement fail their essential purpose.<br />
+                                                    10. <u>
+                                                        Entire Agreement.
+                                                    </u> This Agreement constitutes the sole and entire agreement and understanding between the Parties and supersedes all agreements, understandings,
+                previous inducement or representations, express or implied, pertaining to the subject matter hereof. Unless the Distributor expressly agrees in writing that makes specific
+                reference to this Agreement, the terms and conditions on the Company’s Purchase Order or similar documents shall not apply to any Products sold by Distributor to the
+                    Company and any such terms and conditions on any such document are objected to without the need of further notice or objection.<br />
+                                                        11. <u>
+                                                            Governing Law.
+                                                        </u> This Agreement shall be governed by and interpreted and enforced in accordance with the laws of the State of Texas, without giving effect to any
+                choice of law or conflict of laws rules or provisions (whether of the State of Texas or any other jurisdiction) that would cause the application of the laws of any
+                jurisdiction other than the State of Texas. To the fullest extent permitted by applicable law, each Party hereto (i) agrees that any claim, action or proceeding by such
+                    party seeking any relief whatsoever arising out of, relating to or in connection with, this Agreement or the transactions contemplated hereby shall be brought in the 
+                    state or federal courts located in Collin County, Texas.<br />
+                                                            12. <u>
+                                                                Force Majeure.
+                                                            </u> The Distributor shall not be in default hereunder by reason of any failure or delay in the performance of its obligations hereunder where such failure or
+                delay is due to any cause beyond its reasonable control, including, but not limited to, strikes, labor disputes, civil disturbances, riot, rebellion, invasion, epidemic, pandemic,
+                hostilities, war, embargo, natural disaster, acts of God, acts of terrorism, flood, fire, sabotage, accident, delay in transportation, loss and destruction of property, intervention
+                    by governmental entities, change in laws, regulations or orders, other events or any other circumstances or causes beyond Distributor's reasonable control.<br />
+                                                                13. <u>
+                                                                    Distributor.
+                                                                </u> The Company acknowledges that as a distributor, the Distributor does not own intellectual property rights in the items it sells to the Company and no
+                intellectual property rights in the design composition or manufacture of the Products purchased hereunder is therefore transferable by the Distributor to the Company. The
+                Company additionally acknowledges that as a distributor, the Distributor can only provide such notices of product, process and material changes, or change of
+                manufacturing location or continued product production and notices of discontinuation and support, as it receives from the manufacturer. Lastly, unless otherwise restricted
+                by a separate non-disclosure agreement signed by the Distributor, the Company agrees that the Distributor may provide the Company’s confidential information to its
+                suppliers and subcontractors as needed to fill the Company’s orders without need for further notice or consent. It shall be the responsibility of the Company to mark or
+                    otherwise identify any information, drawing, specifications or technical data provided to Distributor that may be confidential or export-controlled.<br />
+                                                                    14. <u>
+                                                                        Non-solicitation.
+                                                                    </u> The Company shall not, without the Distributor’s prior written consent, during the term of this Agreement and for a period of two (2) years following
+                expiration or termination of this Agreement, solicit, hire or aid in the solicitation or hiring of anyone employed by the Distributor to leave his or her employment to work for
+                    the Company or an affiliate.<br />
+                                                                   
+                                                                            15. <u>
+                                                                                Export.
+                                                                            </u> Distributor’s website and/or Products and services may be subject to U.S. export control laws and export or import regulations in other countries. Company
+                agrees not to export, re-export or transfer, directly or indirectly, any U.S. technical data acquired from Distributor, or any Products utilizing such data, in violation of U.S.
+                    export laws or regulations.<br />
+                                                                                16. <u>
+                                                                                    Miscellaneous.</u> No provision of this Agreement is intended nor shall it be construed to confer upon any person or entity, other than the parties, any rights, remedies or
+                benefits. The section headings in this Agreement are inserted only for convenience and in no way define, limit, construe or describe the scope of such section or in any way
+                affect such section. This Agreement shall be binding upon and inure to the benefit of the parties hereto, and their respective representatives, successors and permitted
+                assigns. This Agreement shall not be assignable by either party. Any provision of this Agreement which is invalid or unenforceable in any jurisdiction shall be ineffective to
+                the extent of such invalidity or unenforceability without invalidating or rendering unenforceable the remaining provisions hereof, and any such invalidity or unenforceability
+                in any jurisdiction shall not invalidate or render unenforceable such provision in any other jurisdiction. Any provision of this Agreement may be amended only if such
+                amendment is accepted in writing by the Distributor.
+                </p>
+            </div>
+        </div>
+    </section>
+</body>

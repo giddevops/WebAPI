@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/546c4276-b7ac-40c7-97ff-7c51a05b7506/resourceGroups/Gideon/providers/Microsoft.Web/sites/GIDGideonWebApi1",
+    "appService.deploySubpath": ""
+}

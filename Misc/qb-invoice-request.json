@@ -1,0 +1,180 @@
+{
+    "Deposit": 0,
+    "domain": null,
+    "sparse": false,
+    "Id": null,
+    "SyncToken": null,
+    "MetaData": null,
+    "CustomField": [
+        {
+            "DefinitionId": "1",
+            "Name": null,
+            "Type": "StringType",
+            "StringValue": "Dane Truelson"
+        },
+        {
+            "DefinitionId": "3",
+            "Name": null,
+            "Type": "StringType",
+            "StringValue": "1"
+        },
+        {
+            "DefinitionId": "2",
+            "Name": null,
+            "Type": "StringType",
+            "StringValue": "PO#456"
+        }
+    ],
+    "DocNumber": "3013",
+    "TxnDate": "2018-12-06Z",
+    "LinkedTxn": null,
+    "Line": [
+        {
+            "Id": null,
+            "LineNum": 1,
+            "Description": null,
+            "Amount": 500.00,
+            "DetailType": "SalesItemLineDetail",
+            "SalesItemLineDetail": {
+                "ItemRef": {
+                    "value": "87",
+                    "name": null
+                },
+                "UnitPrice": 100.00,
+                "DiscountRate": 0.0,
+                "Qty": 5,
+                "TaxCodeRef": {
+                    "value": "TAX"
+                }
+            },
+            "SubTotalLineDetail": null
+        },
+        {
+            "Id": null,
+            "LineNum": 2,
+            "Description": null,
+            "Amount": 250.00,
+            "DetailType": "SalesItemLineDetail",
+            "SalesItemLineDetail": {
+                "ItemRef": {
+                    "value": "88",
+                    "name": null
+                },
+                "UnitPrice": 50.00,
+                "DiscountRate": 0.0,
+                "Qty": 5,
+                "TaxCodeRef": {
+                    "value": "TAX"
+                }
+            },
+            "SubTotalLineDetail": null
+        },
+        {
+            "Id": null,
+            "LineNum": 0,
+            "Description": null,
+            "Amount": 2.00,
+            "DetailType": "SalesItemLineDetail",
+            "SalesItemLineDetail": {
+                "ItemRef": {
+                    "value": "SHIPPING_ITEM_ID",
+                    "name": null
+                },
+                "UnitPrice": 0.0,
+                "DiscountRate": 0.0,
+                "Qty": 0,
+                "TaxCodeRef": {
+                    "value": "NON"
+                }
+            },
+            "SubTotalLineDetail": null
+        },
+        {
+            "Id": null,
+            "LineNum": 0,
+            "Description": null,
+            "Amount": 1.00,
+            "DetailType": "SalesItemLineDetail",
+            "SalesItemLineDetail": {
+                "ItemRef": {
+                    "value": "84",
+                    "name": null
+                },
+                "UnitPrice": 1.00,
+                "DiscountRate": 0.0,
+                "Qty": 1,
+                "TaxCodeRef": {
+                    "value": "NON"
+                }
+            },
+            "SubTotalLineDetail": null
+        },
+        {
+            "Id": null,
+            "LineNum": 0,
+            "Description": null,
+            "Amount": 3.00,
+            "DetailType": "SalesItemLineDetail",
+            "SalesItemLineDetail": {
+                "ItemRef": {
+                    "value": "85",
+                    "name": null
+                },
+                "UnitPrice": 3.00,
+                "DiscountRate": 0.0,
+                "Qty": 1,
+                "TaxCodeRef": {
+                    "value": "TAX"
+                }
+            },
+            "SubTotalLineDetail": null
+        }
+    ],
+    "TxnTaxDetail": {
+        "TxnTaxCodeRef": {
+            "value": "3"
+        },
+        "TotalTax": 100.00,
+        "TaxLine": null
+    },
+    "CustomerRef": {
+        "value": "137",
+        "name": null
+    },
+    "CustomerMemo": null,
+    "BillAddr": {
+        "Id": null,
+        "Line1": "dwayne street",
+        "Line2": null,
+        "Line3": null,
+        "City": "dallas",
+        "CountrySubDivisionCode": "tx",
+        "PostalCode": "75313",
+        "Lat": null,
+        "Long": null
+    },
+    "ShipAddr": {
+        "Id": null,
+        "Line1": "stayne street",
+        "Line2": null,
+        "Line3": null,
+        "City": null,
+        "CountrySubDivisionCode": null,
+        "PostalCode": null,
+        "Lat": null,
+        "Long": null
+    },
+    "SalesTermRef": null,
+    "DueDate": "2018-12-06Z",
+    "ShipDate": "2018-12-05Z",
+    "TotalAmt": 0.0,
+    "ApplyTaxAfterDiscount": false,
+    "PrintStatus": null,
+    "EmailStatus": null,
+    "BillEmail": null,
+    "Balance": 0.0,
+    "ShipMethodRef": {
+        "value": "FedEx International First"
+    },
+    "TrackingNum": "12435"
+}
