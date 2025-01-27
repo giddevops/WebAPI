@@ -145,22 +145,22 @@ namespace GidIndustrial.Gideon.WebApi {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
-
-            services.AddCors(options => {
+            services.AddCors(options =>
+            {
                 options.AddPolicy("CorsPolicy", builder =>
                 {
                     builder.WithOrigins(
                             "https://gideon.gidindustrial.com",
-                            "https://localhost:44399",
-                            "http://localhost:44399",
+                            "https://localhost:7024",
                             "http://localhost:59908",
                             "http://localhost:5142"
                         )
-                        .AllowCredentials()
                         .AllowAnyMethod()
-                        .AllowAnyHeader();
+                        .AllowAnyHeader()
+                        .AllowCredentials();  // Ensure credentials are allowed
                 });
             });
+
             services.Configure<MvcOptions>(options => {
                 options.Filters.Add(new CorsAuthorizationFilterFactory("CorsPolicy"));
             });

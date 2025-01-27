@@ -78,7 +78,7 @@ namespace WebApi.Features.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(leadLineItem); ;
         }
 
         // POST: LeadLineItems
