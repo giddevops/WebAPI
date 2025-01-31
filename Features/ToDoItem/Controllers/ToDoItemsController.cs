@@ -92,7 +92,7 @@ namespace WebApi.Features.Controllers {
                 }
             }
 
-            return NoContent();
+            return Ok(ToDoItem);
         }
 
         // POST: ToDoItem

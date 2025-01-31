@@ -152,8 +152,10 @@ namespace GidIndustrial.Gideon.WebApi {
                     builder.WithOrigins(
                             "https://gideon.gidindustrial.com",
                             "https://localhost:7024",
+                            "http://localhost:5142",
                             "http://localhost:59908",
-                            "http://localhost:5142"
+                            "http://localhost:59945",
+                            "http://localhost:58263"
                         )
                         .AllowAnyMethod()
                         .AllowAnyHeader()

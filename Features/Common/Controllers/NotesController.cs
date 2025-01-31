@@ -157,7 +157,7 @@ namespace WebApi.Features.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(note);
         }
 
         // POST: Notes

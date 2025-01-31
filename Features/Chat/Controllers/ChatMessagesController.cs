@@ -109,7 +109,7 @@ namespace WebApi.Features.Controllers {
                 })
             };
 
-            return NoContent();
+            return Ok(chatMessage);
         }
         public class PageNameAndUrl {
             public string PageName;
