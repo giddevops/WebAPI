@@ -27,7 +27,10 @@ namespace WebApi.Features.Controllers {
             [FromQuery] int skip = 0,
             [FromQuery] int perPage = 10,
             [FromQuery] string sortBy = null,
-            [FromQuery] bool sortAscending = true
+            [FromQuery] bool sortAscending = true,
+            [FromQuery] int? id = null,
+            [FromQuery] DateTime? createdAtStartDate = null,
+            [FromQuery] DateTime? createdAtEndDate = null
         ) {
             var query = from bill in _context.Bills select bill;
 
@@ -36,6 +39,15 @@ namespace WebApi.Features.Controllers {
 
             if (unpaidOnly == true)
                 query = query.Where(item => item.Balance > 0);
+
+            if (id != null)
+                query = query.Where(item => item.Id == id);
+
+            if (createdAtStartDate != null)
+                query = query.Where(l => l.CreatedAt >= createdAtStartDate);
+
+            if (createdAtEndDate != null)
+                query = query.Where(l => l.CreatedAt <= createdAtEndDate);
 
 
             switch (sortBy) {
@@ -210,7 +222,7 @@ namespace WebApi.Features.Controllers {
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, result);
 
-            return NoContent();
+            return Ok(bill);
         }
 
         // POST: Bills

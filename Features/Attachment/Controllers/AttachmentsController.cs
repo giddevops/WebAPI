@@ -383,7 +383,7 @@ namespace WebApi.Features.Controllers {
                 }
             }
 
-            return NoContent();
+            return Ok(attachment);
         }
 
         public class ImageProcess

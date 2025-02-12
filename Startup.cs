@@ -146,8 +146,7 @@ namespace GidIndustrial.Gideon.WebApi {
             });
 
 
-            services.AddCors(options =>
-            {
+            services.AddCors(options => {
                 options.AddPolicy("CorsPolicy", builder =>
                 {
                     builder.WithOrigins(
