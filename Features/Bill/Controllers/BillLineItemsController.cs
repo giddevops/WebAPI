@@ -81,7 +81,7 @@ namespace WebApi.Features.Controllers {
 
             await bill.SyncWithQuickBooks(_quickBooksConnector, _context);
 
-            return NoContent();
+            return Ok(billLineItem);
         }
 
         // // POST: BillLineItems
