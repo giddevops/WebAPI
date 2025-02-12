@@ -105,7 +105,7 @@
     <PackageReference Include="Sendgrid" Version="9.9.0" />
     <PackageReference Include="TimeZoneConverter" Version="2.4.2" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.2.0" />
-    <PackageReference Include="Radzen.Blazor" Version="5.7.2" />
+    <PackageReference Include="Radzen.Blazor" Version="5.9.0" />
   </ItemGroup>
 
   <ItemGroup>
