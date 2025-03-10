@@ -86,7 +86,7 @@ namespace WebApi.Features.Controllers
             await quote.UpdateTotal(_context);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(quoteLineItem);
         }
 
         // POST: QuoteLineItems
@@ -100,7 +100,7 @@ namespace WebApi.Features.Controllers
 
             _context.QuoteLineItems.Add(quoteLineItem);
             await _context.SaveChangesAsync();
-            
+
             var quote = await _context.Quotes
                 .Include(item => item.LineItems)
                 .FirstOrDefaultAsync(item => item.Id == quoteLineItem.QuoteId);
@@ -126,14 +126,18 @@ namespace WebApi.Features.Controllers
                 return NotFound();
             }
 
-            using(var transaction = _context.Database.BeginTransaction()){
+            using (var transaction = _context.Database.BeginTransaction())
+            {
                 _context.QuoteLineItems.Remove(quoteLineItem);
-                try{
+                try
+                {
                     await _context.SaveChangesAsync();
-                }catch(Exception ex){
+                }
+                catch (Exception ex)
+                {
                     return BadRequest(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
                 }
-                
+
                 var quote = await _context.Quotes
                     .Include(item => item.LineItems)
                     .FirstOrDefaultAsync(item => item.Id == quoteLineItem.QuoteId);

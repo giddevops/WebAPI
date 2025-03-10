@@ -19,8 +19,8 @@ using WebApi.Services;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using GidIndustrial.Gideon.WebApi.Libraries;
-using Microsoft.Extensions.Logging.AzureAppServices;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.AzureAppServices;
 using Microsoft.ApplicationInsights.Extensibility;
 using GidIndustrial.Gideon.WebApi.Libraries.AuthorizeNet;
 using GidIndustrial.Gideon.WebApi.Controllers;
@@ -155,7 +155,8 @@ namespace GidIndustrial.Gideon.WebApi {
                             "http://localhost:5142",
                             "http://localhost:59908",
                             "http://localhost:59945",
-                            "http://localhost:58263"
+                            "http://localhost:58263",
+                            "http://localhost:53395"
                         )
                         .AllowAnyMethod()
                         .AllowAnyHeader()

@@ -14,20 +14,24 @@ using System.Data;
 using Dapper;
 using static System.Net.WebRequestMethods;
 
-namespace WebApi.Features.Controllers {
+namespace WebApi.Features.Controllers
+{
     [Produces("application/json")]
     [Route("Products")]
-    public class ProductsController : Controller {
+    public class ProductsController : Controller
+    {
         private readonly AppDBContext _context;
         private static readonly HttpClient HttpClient;
         // private static Dictionary<int,bool> ListingsContainerFetchesInProgress; //I was considering adding something to prevent fetching ListingsContainers for the same product more than one at a time
         private IConfiguration _configuration;
 
-        static ProductsController() {
+        static ProductsController()
+        {
             HttpClient = new HttpClient();
         }
 
-        public ProductsController(AppDBContext context, IConfiguration appConfig) {
+        public ProductsController(AppDBContext context, IConfiguration appConfig)
+        {
             _context = context;
             this._configuration = appConfig;
         }
@@ -43,7 +47,8 @@ namespace WebApi.Features.Controllers {
             [FromQuery] string searchString = null,
             [FromQuery] string sortBy = null,
             [FromQuery] bool sortAscending = true
-        ) {
+        )
+        {
 
             if (!String.IsNullOrWhiteSpace(partNumber))
             {
@@ -71,10 +76,10 @@ namespace WebApi.Features.Controllers {
                         ++i;
                     }
                 }
-    //            if(values.Count > 0)
-    //                attributeSearchText = @"
-    //JOIN ProductAttributeValue ON ProductAttributeValue.ProductId = Product.Id
-    //    AND ProductAttributeValue.ProductAttributeValueOptionId IN (" + String.Join(",", values) + ")";
+                //            if(values.Count > 0)
+                //                attributeSearchText = @"
+                //JOIN ProductAttributeValue ON ProductAttributeValue.ProductId = Product.Id
+                //    AND ProductAttributeValue.ProductAttributeValueOptionId IN (" + String.Join(",", values) + ")";
             }
 
             var CommandText = $@"";
@@ -90,7 +95,8 @@ namespace WebApi.Features.Controllers {
 )";
                 //sortBy = "RANK";
                 hasCondition = true;
-            } else if (productTypeId != null)
+            }
+            else if (productTypeId != null)
             {
                 if (hasCondition)
                     CommandText += " AND ";
@@ -178,16 +184,19 @@ namespace WebApi.Features.Controllers {
 
         // GET: Products/Search?query=...
         [HttpGet("GidPartNumber/GetPart")]
-        public async Task<IActionResult> SearchPartNumber([FromQuery] string gidPartNumber, [FromQuery] string query, [FromQuery] int? existingId) {
+        public async Task<IActionResult> SearchPartNumber([FromQuery] string gidPartNumber, [FromQuery] string query, [FromQuery] int? existingId)
+        {
             var dbQuery = from product in _context.Products select product;
             if (!String.IsNullOrWhiteSpace(query))
                 dbQuery = dbQuery.Where(item => item.GidPartNumber.StartsWith(query));
             else
                 dbQuery = dbQuery.Where(item => item.GidPartNumber == gidPartNumber);
-            if (existingId != null) {
+            if (existingId != null)
+            {
                 dbQuery = dbQuery.Where(item => item.Id != existingId);
             }
-            var prod = await dbQuery.Select(product => new {
+            var prod = await dbQuery.Select(product => new
+            {
                 Id = product.Id,
                 PartNumber = product.PartNumber,
                 GidPartNumber = product.GidPartNumber
@@ -197,13 +206,15 @@ namespace WebApi.Features.Controllers {
 
         // GET: Products/Search?query=...
         [HttpGet("Search")]
-        public IEnumerable<dynamic> Search([FromQuery] string query) {
+        public IEnumerable<dynamic> Search([FromQuery] string query)
+        {
             IQueryable<Product> search = _context.Products.Where(product =>
             EF.Functions.Like(product.PartNumber, query + '%') ||
             product.Aliases.Any(alias => EF.Functions.Like(alias.PartNumber, query + "%")) ||
             EF.Functions.Like(product.GidPartNumber, query + '%')
         ).Include(p => p.Manufacturer);
-            return search.Select(product => new {
+            return search.Select(product => new
+            {
                 Id = product.Id,
                 PartNumber = product.PartNumber,
                 GidPartNumber = product.GidPartNumber,
@@ -214,12 +225,14 @@ namespace WebApi.Features.Controllers {
         }
 
         [HttpGet("{id}/AvailabilityStats")]
-        public async Task<IActionResult> GetAvailabilityStats([FromRoute] int id) {
+        public async Task<IActionResult> GetAvailabilityStats([FromRoute] int id)
+        {
             var product = await _context.Products.AsNoTracking()
                 .Where(item => item.Id == id)
                 .FirstOrDefaultAsync();
 
-            if (product == null) {
+            if (product == null)
+            {
                 return NotFound("A product with that Id was not found");
             }
 
@@ -227,7 +240,8 @@ namespace WebApi.Features.Controllers {
 
             var numCommitted = await _context.InventoryItems.Where(item => item.ProductId == id && item.InventoryItemStatusOptionId == InventoryItemStatusOption.Committed).CountAsync();
 
-            return Ok(new {
+            return Ok(new
+            {
                 QuantityComitted = numCommitted,
                 QuantityAvailable = numAvailable
             });
@@ -235,15 +249,19 @@ namespace WebApi.Features.Controllers {
 
         // GET: Products/GetPartNumber/{id}=...
         [HttpGet("GetPartNumber/{id}")]
-        public IActionResult GetPartNumber([FromRoute] int id) {
+        public IActionResult GetPartNumber([FromRoute] int id)
+        {
             var product = _context.Products
                 .Where(item => item.Id == id)
-                .Select(item => new Product {
+                .Select(item => new Product
+                {
                     Id = item.Id,
                     PartNumber = item.PartNumber
                 }).FirstOrDefault();
-            if (product == null) {
-                return NotFound(new {
+            if (product == null)
+            {
+                return NotFound(new
+                {
                     Error = "A product was not found with that Id " + id.ToString()
                 });
             }
@@ -252,14 +270,17 @@ namespace WebApi.Features.Controllers {
 
         // GET: Products/Details/5
         [HttpGet("Details/{id}")]
-        public async Task<IActionResult> GetProductDetails([FromRoute] int id) {
-            if (!ModelState.IsValid) {
+        public async Task<IActionResult> GetProductDetails([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
             var product = await _context.Products.SingleOrDefaultAsync(m => m.Id == id);
 
-            if (product == null) {
+            if (product == null)
+            {
                 return NotFound();
             }
 
@@ -270,8 +291,10 @@ namespace WebApi.Features.Controllers {
 
         // GET: Products/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProduct([FromRoute] int id) {
-            if (!ModelState.IsValid) {
+        public async Task<IActionResult> GetProduct([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
@@ -283,7 +306,8 @@ namespace WebApi.Features.Controllers {
                 .Include(item => item.ProductType)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
-            if (product == null) {
+            if (product == null)
+            {
                 return NotFound();
             }
 
@@ -292,15 +316,19 @@ namespace WebApi.Features.Controllers {
 
         // GET: Products/5/MostRecentListingsContainer
         [HttpGet("{id}/MostRecentListingsContainer")]
-        public async Task<IActionResult> GetMostRecentListingsContainer([FromRoute] int id, [FromQuery] bool forceRefresh = false) {
-            if (!ModelState.IsValid) {
+        public async Task<IActionResult> GetMostRecentListingsContainer([FromRoute] int id, [FromQuery] bool forceRefresh = false)
+        {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
             var product = await _context.Products.SingleOrDefaultAsync(m => m.Id == id);
 
-            if (product == null) {
-                return BadRequest(new {
+            if (product == null)
+            {
+                return BadRequest(new
+                {
                     Error = "Product was not found"
                 });
             }
@@ -309,7 +337,8 @@ namespace WebApi.Features.Controllers {
                 .OrderByDescending(item => item.CreatedAt)
                 .FirstOrDefaultAsync(item => item.ProductId == id);
 
-            if (listingsContainer == null || forceRefresh) {
+            if (listingsContainer == null || forceRefresh)
+            {
                 return await this.FetchNewListingsContainerInternal(product);
             }
 
@@ -317,7 +346,8 @@ namespace WebApi.Features.Controllers {
         }
 
 
-        public async Task<IActionResult> FetchNewListingsContainerInternal(Product product) {
+        public async Task<IActionResult> FetchNewListingsContainerInternal(Product product)
+        {
             // if(ProductsController.ListingsContainerFetchesInProgress.ContainsKey(product.Id)){
             //     return BadRequest(new {
             //         Error = "Another process is already fetching. Please try again later"
@@ -361,7 +391,8 @@ namespace WebApi.Features.Controllers {
 
                 return Ok(newListingsContainer);
             }
-            catch(Exception ex) {
+            catch (Exception ex)
+            {
                 string t = ex.Message;
             }
 
@@ -369,10 +400,13 @@ namespace WebApi.Features.Controllers {
         }
 
         [HttpGet("{id}/FetchNewListingsContainer")]
-        public async Task<IActionResult> FetchNewListingsContainer([FromRoute] int id) {
+        public async Task<IActionResult> FetchNewListingsContainer([FromRoute] int id)
+        {
             var product = await _context.Products.FirstOrDefaultAsync(item => item.Id == id);
-            if (product == null) {
-                return BadRequest(new {
+            if (product == null)
+            {
+                return BadRequest(new
+                {
                     Error = "Product not found"
                 });
             }
@@ -380,7 +414,8 @@ namespace WebApi.Features.Controllers {
         }
 
         [HttpGet("{id}/ProductKitItems")]
-        public async Task<IActionResult> FetchProductKitItems([FromRoute] int id) {
+        public async Task<IActionResult> FetchProductKitItems([FromRoute] int id)
+        {
             var items = await _context.ProductKitItems
                 .Where(item => item.ParentProductId == id)
                 .ToListAsync();
@@ -388,16 +423,21 @@ namespace WebApi.Features.Controllers {
         }
 
         [HttpPut("{id}/ProductKitItems")]
-        public async Task<IActionResult> PutProductKitItems([FromRoute] int id, [FromBody] List<ProductKitItem> productKitItems) {
+        public async Task<IActionResult> PutProductKitItems([FromRoute] int id, [FromBody] List<ProductKitItem> productKitItems)
+        {
             var product = await _context.Products.FirstOrDefaultAsync(item => item.Id == id);
-            if (product == null) {
+            if (product == null)
+            {
                 return BadRequest("Error, product not found");
             }
-            using (var transaction = _context.Database.BeginTransaction()) {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
                 _context.ProductKitItems.RemoveRange(_context.ProductKitItems.Where(item => item.ParentProductId == id));
                 await _context.SaveChangesAsync();
-                foreach (var productKitItem in productKitItems) {
-                    if (productKitItem.ParentProductId != product.Id) {
+                foreach (var productKitItem in productKitItems)
+                {
+                    if (productKitItem.ParentProductId != product.Id)
+                    {
                         return BadRequest("ParentProductId must match product Id");
                     }
                     _context.ProductKitItems.Add(productKitItem);
@@ -409,19 +449,25 @@ namespace WebApi.Features.Controllers {
         }
 
         [HttpPost("{id}/AttributeValues")]
-        public async Task<IActionResult> SetAttributeValues([FromRoute] int id, [FromBody] Dictionary<int, List<int>> productAttributeValues) {
+        public async Task<IActionResult> SetAttributeValues([FromRoute] int id, [FromBody] Dictionary<int, List<int>> productAttributeValues)
+        {
 
             var product = await _context.Products.AsNoTracking().FirstOrDefaultAsync(item => item.Id == id);
-            if (product == null) {
+            if (product == null)
+            {
                 return NotFound("A Product was not found with that Id");
             }
 
-            using (var transaction = _context.Database.BeginTransaction()) {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
                 _context.ProductAttributeValues.RemoveRange(_context.ProductAttributeValues.Where(item => item.ProductId == product.Id));
                 await _context.SaveChangesAsync();
-                foreach (var attrValues in productAttributeValues) {
-                    foreach (var attrValue in attrValues.Value) {
-                        _context.Add(new ProductAttributeValue {
+                foreach (var attrValues in productAttributeValues)
+                {
+                    foreach (var attrValue in attrValues.Value)
+                    {
+                        _context.Add(new ProductAttributeValue
+                        {
                             CreatedAt = DateTime.UtcNow,
                             ProductAttributeValueOptionId = attrValue,
                             ProductId = product.Id
@@ -444,16 +490,20 @@ namespace WebApi.Features.Controllers {
 
         // PUT: Products/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct([FromRoute] int id, [FromBody] Product product) {
-            if (!ModelState.IsValid) {
+        public async Task<IActionResult> PutProduct([FromRoute] int id, [FromBody] Product product)
+        {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
-            if (id != product.Id) {
+            if (id != product.Id)
+            {
                 return BadRequest();
             }
             var originalProduct = await _context.Products.AsNoTracking().FirstOrDefaultAsync(item => item.Id == product.Id);
-            if (originalProduct == null) {
+            if (originalProduct == null)
+            {
                 return NotFound("A Product was not found with that Id");
             }
             product.QuickBooksId = originalProduct.QuickBooksId;
@@ -461,13 +511,18 @@ namespace WebApi.Features.Controllers {
 
             _context.Entry(product).State = EntityState.Modified;
 
-            try {
+            try
+            {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException) {
-                if (!ProductExists(id)) {
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductExists(id))
+                {
                     return NotFound();
-                } else {
+                }
+                else
+                {
                     throw;
                 }
             }
@@ -478,22 +533,26 @@ namespace WebApi.Features.Controllers {
 
         // POST: Products
         [HttpPost]
-        public async Task<IActionResult> PostProduct([FromBody] Product product, [FromQuery] bool isGidPart = false) {
-            if (!ModelState.IsValid) {
+        public async Task<IActionResult> PostProduct([FromBody] Product product, [FromQuery] bool isGidPart = false)
+        {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
             product.PartNumber = product.PartNumber.Trim();
-            if (isGidPart && String.IsNullOrWhiteSpace(product.GidPartNumber)) {
+            if (isGidPart && String.IsNullOrWhiteSpace(product.GidPartNumber))
+            {
                 var productType = await _context.ProductTypes.FirstOrDefaultAsync(item => item.Id == product.ProductTypeId);
                 product.GidPartNumber = await productType.GetNextGidPartNumber(_context);
             }
 
-            if(product.ManufacturerId != null)
+            if (product.ManufacturerId != null)
             {
                 var existingProduct = await _context.Products.FirstOrDefaultAsync(item => item.ManufacturerId == product.ManufacturerId && item.PartNumber == product.PartNumber.Trim());
-                if(existingProduct != null)
+                if (existingProduct != null)
                 {
-                    return BadRequest(new {
+                    return BadRequest(new
+                    {
                         Error = "A product with the same manufacturer and part number already exists.",
                         ExistingProductId = existingProduct.Id,
                         ExistingProductPartNumber = existingProduct.PartNumber
@@ -509,8 +568,10 @@ namespace WebApi.Features.Controllers {
 
         // DELETE: Products/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct([FromRoute] int id) {
-            if (!ModelState.IsValid) {
+        public async Task<IActionResult> DeleteProduct([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
@@ -518,30 +579,36 @@ namespace WebApi.Features.Controllers {
                 .Include(item => item.Attachments)
                     .ThenInclude(item => item.Attachment)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (product == null) {
+            if (product == null)
+            {
                 return NotFound();
             }
 
-            foreach (var itemAttachment in product.Attachments.ToList()) {
+            foreach (var itemAttachment in product.Attachments.ToList())
+            {
                 await itemAttachment.Attachment.Delete(_context, _configuration);
             }
             _context.Products.Remove(product);
-            try {
+            try
+            {
                 await _context.SaveChangesAsync();
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return BadRequest(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
             }
 
             return Ok(product);
         }
 
-        private bool ProductExists(int id) {
+        private bool ProductExists(int id)
+        {
             return _context.Products.Any(e => e.Id == id);
         }
     }
 
-    public class ProductAttributeValues {
+    public class ProductAttributeValues
+    {
 
     }
 }

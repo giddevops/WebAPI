@@ -26,13 +26,15 @@ using Microsoft.Graph;
 using iTextSharp.text.pdf.parser;
 using Org.BouncyCastle.Crypto.Paddings;
 
-namespace WebApi.Features.Controllers {
+namespace WebApi.Features.Controllers
+{
     /// <summary>
     /// 
     /// </summary>
     [Produces("application/json")]
     [Route("Quotes")]
-    public class QuotesController : Controller {
+    public class QuotesController : Controller
+    {
         private readonly AppDBContext _context;
         // private readonly string SendgridApiKey;
         public IHostingEnvironment Environment;
@@ -43,7 +45,8 @@ namespace WebApi.Features.Controllers {
         //This is a helper service that allows rendering a razor file to raw html.  This is used to generate quotes
         private readonly ViewRender viewRenderer;
 
-        public QuotesController(AppDBContext context, IConfiguration config, ViewRender renderer, IHostingEnvironment env, IConverter converter) {
+        public QuotesController(AppDBContext context, IConfiguration config, ViewRender renderer, IHostingEnvironment env, IConverter converter)
+        {
             _context = context;
             _configuration = config;
             viewRenderer = renderer;
@@ -57,6 +60,7 @@ namespace WebApi.Features.Controllers {
             [FromQuery] int skip = 0,
             [FromQuery] int perPage = 10,
             [FromQuery] Boolean fetchRelated = false,
+            [FromQuery] int? id = null,
             [FromQuery] int? contactId = null,
             [FromQuery] int? companyId = null,
             [FromQuery] int? productId = null,
@@ -70,15 +74,19 @@ namespace WebApi.Features.Controllers {
             [FromQuery] bool sortAscending = true,
             [FromQuery] string companyName = null
 
-        ) {
+        )
+        {
             var query = from quote in _context.Quotes select quote;
 
-            if (fetchRelated) {
+            if (fetchRelated)
+            {
                 query = query
                     .Include(l => l.LineItems)
                         .ThenInclude(item => item.Product);
             }
 
+            if (id != null)
+                query = query.Where(l => l.Id == id);
             if (companyId != null)
                 query = query.Where(l => l.CompanyId == companyId);
             if (contactId != null)
@@ -98,7 +106,8 @@ namespace WebApi.Features.Controllers {
             if (!String.IsNullOrWhiteSpace(companyName))
                 query = query.Where(item => EF.Functions.Like(item.Company.Name, companyName + "%"));
 
-            switch (sortBy) {
+            switch (sortBy)
+            {
                 case "Id":
                     query = sortAscending ? query.OrderBy(item => item.Id) : query.OrderByDescending(item => item.Id);
                     break;
@@ -137,12 +146,16 @@ namespace WebApi.Features.Controllers {
             }
 
 
-            if (!String.IsNullOrWhiteSpace(searchString)) {
+            if (!String.IsNullOrWhiteSpace(searchString))
+            {
                 searchString = searchString.Trim();
                 int searchStringNumber;
-                if (Int32.TryParse(searchString, out searchStringNumber)) {
+                if (Int32.TryParse(searchString, out searchStringNumber))
+                {
 
-                } else {
+                }
+                else
+                {
                     searchStringNumber = 0;
                 }
                 query = query.Where(item =>
@@ -169,18 +182,21 @@ namespace WebApi.Features.Controllers {
             if (String.IsNullOrWhiteSpace(searchString))
                 count = query.Count();
 
-            return new ListResult {
+            return new ListResult
+            {
                 Items = query.Skip(skip).Take(perPage),
                 Count = count
             };
         }
 
-        
+
         [HttpGet("Create/AutoQuote")]
-        public async Task<IActionResult> CreateAutoQuote([FromQuery] string PartNumber, [FromQuery] string Manufacturer, [FromQuery] string Category, [FromQuery] decimal Price, [FromQuery] int Quantity, [FromQuery] string PersonName, [FromQuery] string Email, [FromQuery] string Phone, [FromQuery] string CompanyName) {
+        public async Task<IActionResult> CreateAutoQuote([FromQuery] string PartNumber, [FromQuery] string Manufacturer, [FromQuery] string Category, [FromQuery] decimal Price, [FromQuery] int Quantity, [FromQuery] string PersonName, [FromQuery] string Email, [FromQuery] string Phone, [FromQuery] string CompanyName)
+        {
             var matchingProduct = await Lead.MatchProduct(_context, PartNumber, Manufacturer, Category, false);
-            var quote = new Quote {
-                
+            var quote = new Quote
+            {
+
                 LineItems = new List<QuoteLineItem>{
                     new QuoteLineItem{
                         Price = Price,
@@ -207,7 +223,7 @@ namespace WebApi.Features.Controllers {
                 WireTransferFee = 0,
                 Expiration = DateTime.UtcNow.AddDays(30),
 
-                
+
 
                 Contact = new GidIndustrial.Gideon.WebApi.Models.Contact
                 {
@@ -229,7 +245,8 @@ namespace WebApi.Features.Controllers {
                         }
                     },
                 },
-                Company = new Company {
+                Company = new Company
+                {
                     Name = CompanyName,
                     AutoInserted = true,
                     PhoneNumbers = new List<CompanyPhoneNumber>{
@@ -252,12 +269,14 @@ namespace WebApi.Features.Controllers {
             return await this.PostQuote(quote);
         }
 
-    
+
 
         // GET: Quotes/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetQuote([FromRoute] int id, [FromQuery] bool forOnlineQuote) {
-            if (!ModelState.IsValid) {
+        public async Task<IActionResult> GetQuote([FromRoute] int id, [FromQuery] bool forOnlineQuote)
+        {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
@@ -354,8 +373,10 @@ namespace WebApi.Features.Controllers {
 
         // GET: Quotes/5/LineItems
         [HttpGet("{id}/LineItems")]
-        public async Task<IActionResult> GetQuoteLineItems([FromRoute] int id) {
-            if (!ModelState.IsValid) {
+        public async Task<IActionResult> GetQuoteLineItems([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
@@ -380,16 +401,19 @@ namespace WebApi.Features.Controllers {
         /// </summary>
         /// <returns></returns>
         // [HttpGet("{id}/QuoteLink")]
-        public async Task<string> GetQuoteLink([FromRoute] int id) {
+        public async Task<string> GetQuoteLink([FromRoute] int id)
+        {
             var quote = await _context.Quotes.FirstOrDefaultAsync(q => q.Id == id);
-            if (quote == null) {
+            if (quote == null)
+            {
                 return null;
             }
             var baseUrl = "https://forms.gidindustrial.com/quote/";
 #if DEBUG
             baseUrl = "http://localhost:50068/quote/";
 #endif
-            if (!String.IsNullOrWhiteSpace(quote.QuoteFormLink)) {
+            if (!String.IsNullOrWhiteSpace(quote.QuoteFormLink))
+            {
                 return quote.QuoteFormLink;
             }
             string GidApiKey = this._configuration.GetValue<string>("GidIndustrialApiKey");
@@ -404,7 +428,8 @@ namespace WebApi.Features.Controllers {
             await request.GetResponseAsync())
             using (Stream stream = response.GetResponseStream())
 
-            using (StreamReader reader = new StreamReader(stream)) {
+            using (StreamReader reader = new StreamReader(stream))
+            {
                 quote.QuoteFormLink = baseUrl + await reader.ReadToEndAsync();
             }
 
@@ -421,7 +446,8 @@ namespace WebApi.Features.Controllers {
         /// <param name="id">The id of the quote</param>
         /// <returns></returns>
         [HttpGet("{id}/GenerateQuotePdf")]
-        public async Task GenerateQuotePdf([FromRoute] int id) {
+        public async Task GenerateQuotePdf([FromRoute] int id)
+        {
 
             var quote = await _context.Quotes
                 .Include(q => q.Contact)
@@ -449,7 +475,8 @@ namespace WebApi.Features.Controllers {
 
 
 
-            if (quote == null) {
+            if (quote == null)
+            {
                 Response.StatusCode = 400;
                 return;
             }
@@ -476,11 +503,11 @@ namespace WebApi.Features.Controllers {
                 HtmlToPdf converter = new HtmlToPdf();
                 //converter.Options.AutoFitHeight = HtmlToPdfPageFitMode.ShrinkOnly;
                 SelectPdf.PdfDocument pdfDocument = converter.ConvertHtmlString(quoteHtml);
-                
+
                 // Remove last blank page
-                if(pdfDocument.Pages.Count > 1 && pdfDocument.Pages[pdfDocument.Pages.Count - 1].ClientRectangle.Location.IsEmpty) 
-                { 
-                   // pdfDocument.RemovePageAt(pdfDocument.Pages.Count - 1);  
+                if (pdfDocument.Pages.Count > 1 && pdfDocument.Pages[pdfDocument.Pages.Count - 1].ClientRectangle.Location.IsEmpty)
+                {
+                    // pdfDocument.RemovePageAt(pdfDocument.Pages.Count - 1);  
                 }
 
                 // Render t&c html
@@ -581,7 +608,7 @@ namespace WebApi.Features.Controllers {
             {
                 string t = "";
             }
-            
+
             return;
         }
 
@@ -660,10 +687,12 @@ namespace WebApi.Features.Controllers {
 
         // GET: Quotes/Search?query=...
         [HttpGet("Search")]
-        public IEnumerable<dynamic> Search([FromQuery] string query) {
+        public IEnumerable<dynamic> Search([FromQuery] string query)
+        {
             return _context.Quotes
                  .Where(quote => quote.Id == int.Parse(query))
-                 .Select(quote => new {
+                 .Select(quote => new
+                 {
                      Id = quote.Id,
                      Name = quote.Id
                  });
@@ -675,7 +704,8 @@ namespace WebApi.Features.Controllers {
         /// <param name="id">The id of the quote</param>
         /// <returns></returns>
         [HttpGet("{id}/GenerateProFormaInvoicePdf")]
-        public async Task GenerateProFormaInvoicePdf([FromRoute] int id, [FromQuery] List<int?> quoteLineItemIds) {
+        public async Task GenerateProFormaInvoicePdf([FromRoute] int id, [FromQuery] List<int?> quoteLineItemIds)
+        {
 
             var quote = await _context.Quotes
                 .Include(q => q.Contact)
@@ -697,7 +727,8 @@ namespace WebApi.Features.Controllers {
                 .Include(item => item.CurrencyOption)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
-            if (quote == null) {
+            if (quote == null)
+            {
                 Response.StatusCode = 400;
                 return;
             }
@@ -706,7 +737,8 @@ namespace WebApi.Features.Controllers {
             ViewData["LogoUrl"] = Environment.ContentRootPath + @"\Features\Quote\Views\gid-industrial-logo.png";
             ViewData["IsGidEurope"] = await quote.CheckIfIsGidEurope(_context);
             string quoteHtml = viewRenderer.Render("~/Features/Quote/Views/ProFormaInvoicePdf.cshtml", quote, ViewData);
-            var doc = new HtmlToPdfDocument() {
+            var doc = new HtmlToPdfDocument()
+            {
                 GlobalSettings = {
                     ColorMode = ColorMode.Color,
                     Orientation = Orientation.Portrait,
@@ -731,12 +763,15 @@ namespace WebApi.Features.Controllers {
 
         // PUT: Quotes/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutQuote([FromRoute] int id, [FromBody] Quote quote) {
-            if (!ModelState.IsValid) {
+        public async Task<IActionResult> PutQuote([FromRoute] int id, [FromBody] Quote quote)
+        {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
-            if (id != quote.Id) {
+            if (id != quote.Id)
+            {
                 return BadRequest();
             }
 
@@ -763,16 +798,23 @@ namespace WebApi.Features.Controllers {
             }
 
 
-            if (previousQuote.SalesPersonId != quote.SalesPersonId) {
+            if (previousQuote.SalesPersonId != quote.SalesPersonId)
+            {
                 var previousSalesPersonName = previousQuote.SalesPerson != null ? previousQuote.SalesPerson.DisplayName : "";
                 var currentSalesPersonName = "";
-                if (quote.SalesPersonId == null) {
+                if (quote.SalesPersonId == null)
+                {
                     currentSalesPersonName = "Nobody";
-                } else {
+                }
+                else
+                {
                     var user = await _context.Users.FirstOrDefaultAsync(item => item.Id == quote.SalesPersonId);
-                    if (user == null) {
+                    if (user == null)
+                    {
                         currentSalesPersonName = "Nobody";
-                    } else {
+                    }
+                    else
+                    {
                         currentSalesPersonName = user.DisplayName;
                     }
                 }
@@ -793,14 +835,19 @@ namespace WebApi.Features.Controllers {
                 EventLogEntry = newEventLogEntry
             });
 
-            try {
+            try
+            {
                 await quote.UpdateTotal(_context);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException) {
-                if (!QuoteExists(id)) {
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!QuoteExists(id))
+                {
                     return NotFound();
-                } else {
+                }
+                else
+                {
                     throw;
                 }
             }
@@ -811,12 +858,15 @@ namespace WebApi.Features.Controllers {
 
         // POST: Quotes
         [HttpPost]
-        public async Task<IActionResult> PostQuote([FromBody] Quote quote) {
-            if (!ModelState.IsValid) {
+        public async Task<IActionResult> PostQuote([FromBody] Quote quote)
+        {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
-            if (quote.QuoteStatusOptionId == null) {
+            if (quote.QuoteStatusOptionId == null)
+            {
                 var pendingStatus = await _context.QuoteStatusOptions.FirstAsync(item => item.Value == "Pending");
                 quote.QuoteStatusOptionId = pendingStatus.Id;
             }
@@ -830,9 +880,11 @@ namespace WebApi.Features.Controllers {
             _context.Quotes.Add(quote);
 
             //add to quote event log entry the fact that it was created and who created it
-            _context.QuoteEventLogEntries.Add(new QuoteEventLogEntry {
+            _context.QuoteEventLogEntries.Add(new QuoteEventLogEntry
+            {
                 Quote = quote,
-                EventLogEntry = new EventLogEntry {
+                EventLogEntry = new EventLogEntry
+                {
                     Event = "Created",
                     CreatedAt = DateTime.UtcNow,
                     OccurredAt = DateTime.UtcNow,
@@ -842,10 +894,13 @@ namespace WebApi.Features.Controllers {
             });
 
             //if this quote is coming from a lead, add to lead event log entries table
-            if (quote.LeadId != null && quote.LeadId != 0) {
-                _context.LeadEventLogEntries.Add(new LeadEventLogEntry {
+            if (quote.LeadId != null && quote.LeadId != 0)
+            {
+                _context.LeadEventLogEntries.Add(new LeadEventLogEntry
+                {
                     LeadId = quote.LeadId,
-                    EventLogEntry = new EventLogEntry {
+                    EventLogEntry = new EventLogEntry
+                    {
                         Event = "Converted to Quote",
                         CreatedAt = DateTime.UtcNow,
                         OccurredAt = DateTime.UtcNow,
@@ -865,7 +920,7 @@ namespace WebApi.Features.Controllers {
             {
                 string t = "";
             }
-            
+
 
 
             //get a link to quote from DJ's api
@@ -876,12 +931,14 @@ namespace WebApi.Features.Controllers {
 
         // POST: Quotes/SendQuote
         [HttpPost("SendQuote")]
-        public async Task<IActionResult> SendQuote([FromBody] SendQuoteData sendQuoteData) {
+        public async Task<IActionResult> SendQuote([FromBody] SendQuoteData sendQuoteData)
+        {
             var emailParameters = sendQuoteData.EmailParameters;
             var quote = sendQuoteData.Quote;
 
             var errorMessages = emailParameters.getErrorMessage();
-            if (errorMessages != null) {
+            if (errorMessages != null)
+            {
                 return BadRequest(errorMessages);
             }
 
@@ -894,10 +951,13 @@ namespace WebApi.Features.Controllers {
 
             var response = await client.SendEmailAsync(msg);
             int responseStatusCodeNumber = (int)response.StatusCode;
-            if (responseStatusCodeNumber >= 200 && responseStatusCodeNumber < 300) {
-                _context.QuoteEventLogEntries.Add(new QuoteEventLogEntry {
+            if (responseStatusCodeNumber >= 200 && responseStatusCodeNumber < 300)
+            {
+                _context.QuoteEventLogEntries.Add(new QuoteEventLogEntry
+                {
                     QuoteId = sendQuoteData.Quote.Id,
-                    EventLogEntry = new EventLogEntry {
+                    EventLogEntry = new EventLogEntry
+                    {
                         Event = "Sent Quote",
                         CreatedAt = DateTime.UtcNow,
                         OccurredAt = DateTime.UtcNow,
@@ -906,13 +966,17 @@ namespace WebApi.Features.Controllers {
                     }
                 });
                 await _context.SaveChangesAsync();
-            } else {
-                return BadRequest(new {
+            }
+            else
+            {
+                return BadRequest(new
+                {
                     Error = "Error sending email. Status code was wrong"
                 });
             }
 
-            return Ok(new {
+            return Ok(new
+            {
                 StatusCode = response.StatusCode,
                 Body = response.Body
             });
@@ -920,12 +984,14 @@ namespace WebApi.Features.Controllers {
 
         // POST: Quotes/SenProFormaInvoice
         [HttpPost("SendProFormaInvoice")]
-        public async Task<IActionResult> SendProFormaInvoice([FromBody] SendQuoteData sendQuoteData) {
+        public async Task<IActionResult> SendProFormaInvoice([FromBody] SendQuoteData sendQuoteData)
+        {
             var emailParameters = sendQuoteData.EmailParameters;
             var quote = sendQuoteData.Quote;
 
             var errorMessages = emailParameters.getErrorMessage();
-            if (errorMessages != null) {
+            if (errorMessages != null)
+            {
                 return BadRequest(errorMessages);
             }
 
@@ -934,10 +1000,13 @@ namespace WebApi.Features.Controllers {
 
             var response = await client.SendEmailAsync(msg);
             int responseStatusCodeNumber = (int)response.StatusCode;
-            if (responseStatusCodeNumber >= 200 && responseStatusCodeNumber < 300) {
-                _context.QuoteEventLogEntries.Add(new QuoteEventLogEntry {
+            if (responseStatusCodeNumber >= 200 && responseStatusCodeNumber < 300)
+            {
+                _context.QuoteEventLogEntries.Add(new QuoteEventLogEntry
+                {
                     QuoteId = sendQuoteData.Quote.Id,
-                    EventLogEntry = new EventLogEntry {
+                    EventLogEntry = new EventLogEntry
+                    {
                         Event = "Sent Pro Forma Invoice",
                         CreatedAt = DateTime.UtcNow,
                         OccurredAt = DateTime.UtcNow,
@@ -946,12 +1015,16 @@ namespace WebApi.Features.Controllers {
                     }
                 });
                 await _context.SaveChangesAsync();
-            } else {
-                return BadRequest(new {
+            }
+            else
+            {
+                return BadRequest(new
+                {
                     Error = "Error sending email. Status code was wrong"
                 });
             }
-            return Ok(new {
+            return Ok(new
+            {
                 StatusCode = response.StatusCode,
                 Body = response.Body
             });
@@ -959,8 +1032,10 @@ namespace WebApi.Features.Controllers {
 
         // DELETE: Quotes/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteQuote([FromRoute] int id) {
-            if (!ModelState.IsValid) {
+        public async Task<IActionResult> DeleteQuote([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
@@ -971,27 +1046,32 @@ namespace WebApi.Features.Controllers {
                     .ThenInclude(item => item.ContactLogItem)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
-            if (quote == null) {
+            if (quote == null)
+            {
                 return NotFound();
             }
 
-            foreach (var quoteAttachment in quote.Attachments.ToList()) {
+            foreach (var quoteAttachment in quote.Attachments.ToList())
+            {
                 await quoteAttachment.Attachment.Delete(_context, _configuration);
             }
 
             _context.ContactLogItems.RemoveRange(quote.ContactLogItems.Select(item => item.ContactLogItem));
             _context.Quotes.Remove(quote);
-            try {
+            try
+            {
                 await _context.SaveChangesAsync();
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return BadRequest(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
             }
 
             return Ok(quote);
         }
 
-        private bool QuoteExists(int id) {
+        private bool QuoteExists(int id)
+        {
             return _context.Quotes.Any(e => e.Id == id);
         }
     }
